@@ -233,7 +233,8 @@ export default function Navbar() {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="fixed inset-0 top-20 z-40 bg-white overflow-y-auto pb-20 border-t border-slate-200 xl:hidden"
+            className="fixed top-20 left-0 right-0 bottom-0 z-40 bg-white overflow-y-auto pb-20 border-t border-slate-200 xl:hidden"
+            style={{ height: 'calc(100vh - 5rem)' }}
           >
             <div className="p-6 space-y-6">
 

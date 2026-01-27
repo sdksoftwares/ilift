@@ -6,7 +6,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import {
   CheckCircle2, Truck, ShieldCheck,
-  FileText, ArrowRight, Download, Phone, Info
+  FileText, ArrowRight, Phone, Info
 } from 'lucide-react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Badge } from '@/components/ui/badge'
@@ -99,13 +99,8 @@ export default async function ProductPage(props: PageProps) {
 
             {/* MOVED: Primary CTAs are now here for better visibility */}
             {/* UPDATED: Buttons are now in columns (grid) instead of a list */}
-            <div className="grid grid-cols-2 gap-3">
-              <div className="w-full">
-                <AddToCartButton product={product} />
-              </div>
-              <Button variant="outline" className="w-full h-12 border-slate-300 text-slate-600 hover:bg-slate-50 hover:text-slate-900 font-medium flex items-center justify-center gap-2">
-                <Download className="h-4 w-4" /> Datasheet
-              </Button>
+            <div className="w-full">
+              <AddToCartButton product={product} />
             </div>
           </div>
 

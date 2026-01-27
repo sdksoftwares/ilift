@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { useState } from 'react'
 import {
   Facebook, Linkedin, Twitter, Mail, Phone, MapPin,
-  ArrowRight, ChevronDown, Download, ShieldCheck
+  ArrowRight, ChevronDown, Download, ShieldCheck, Youtube, Instagram
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -69,8 +69,18 @@ export default function Footer() {
 
           {/* Social Links */}
           <div className="flex gap-4 pt-2">
-            {[Linkedin, Twitter, Facebook].map((Icon, i) => (
-              <Link key={i} href="#" className="h-10 w-10 rounded-lg bg-slate-900 flex items-center justify-center hover:bg-slate-800 text-slate-400 hover:text-white transition-all border border-slate-800 hover:border-slate-700 hover:-translate-y-1">
+            {[
+              { Icon: Youtube, href: "https://www.youtube.com/channel/UCqp9JX1C8WiC4nz8RfyVgog" },
+              { Icon: Instagram, href: "https://www.instagram.com/ilift.global/" },
+              { Icon: Facebook, href: "https://www.facebook.com/people/I-Lift/61587190494660/?sk=directory_intro" },
+            ].map(({ Icon, href }, i) => (
+              <Link
+                key={i}
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="h-10 w-10 rounded-lg bg-slate-900 flex items-center justify-center hover:bg-slate-800 text-slate-400 hover:text-white transition-all border border-slate-800 hover:border-slate-700 hover:-translate-y-1"
+              >
                 <Icon className="h-5 w-5" />
               </Link>
             ))}
