@@ -180,7 +180,7 @@ export default async function ServiceDetailPage({ params }: PageProps) {
               <ul className="space-y-2 text-sm text-slate-600">
                 <li className="flex gap-2"><div className="h-1.5 w-1.5 rounded-full bg-red-500 mt-1.5" />Certified Engineers</li>
                 <li className="flex gap-2"><div className="h-1.5 w-1.5 rounded-full bg-red-500 mt-1.5" />Genuine Parts Guarantee</li>
-                <li className="flex gap-2"><div className="h-1.5 w-1.5 rounded-full bg-red-500 mt-1.5" />Pan-India Coverage</li>
+                <li className="flex gap-2"><div className="h-1.5 w-1.5 rounded-full bg-red-500 mt-1.5" />Nationwide Coverage</li>
               </ul>
             </div>
           </div>

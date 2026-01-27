@@ -8,11 +8,11 @@ import {
 
 export const metadata = {
   title: 'About Us | iLift - Elevating Industrial Standards',
-  description: 'Learn about iLift, India\'s premier B2B platform for certified industrial lifting equipment, spare parts, and machinery.',
-  keywords: ['industrial lifting equipment', 'material handling india', 'forklift supplier', 'warehouse machinery'],
+  description: 'Learn about iLift, the premier B2B platform for certified industrial lifting equipment, spare parts, and machinery.',
+  keywords: ['industrial lifting equipment', 'material handling', 'forklift supplier', 'warehouse machinery'],
   openGraph: {
     title: 'About iLift | Elevating Industrial Standards',
-    description: 'Bridging the gap between heavy machinery manufacturers and Indian businesses.',
+    description: 'Bridging the gap between heavy machinery manufacturers and businesses.',
     type: 'website',
   }
 }
@@ -68,7 +68,7 @@ export default function AboutPage() {
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-amber-500">Standards.</span>
           </h1>
           <p className="text-lg md:text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed mb-10">
-            iLift bridges the gap between top-tier heavy machinery manufacturers and the businesses that power India's economy.
+            iLift bridges the gap between top-tier heavy machinery manufacturers and the businesses that power the economy.
             We make procurement digital, transparent, and efficient.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">

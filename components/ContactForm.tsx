@@ -103,7 +103,7 @@ export default function ContactForm() {
                         <p className="text-slate-900 font-bold text-lg">
                             9:00 AM - 6:00 PM
                         </p>
-                        <p className="text-xs text-slate-400 mt-1 font-medium bg-slate-100 px-2 py-1 rounded">IST (Indian Standard Time)</p>
+                        <p className="text-xs text-slate-400 mt-1 font-medium bg-slate-100 px-2 py-1 rounded">WAT (West Africa Time)</p>
                     </div>
 
                 </div>
@@ -252,8 +252,8 @@ export default function ContactForm() {
                             </h3>
                             <div className="space-y-4">
                                 <FAQItem
-                                    question="Do you ship across India?"
-                                    answer="Yes, we have logistics partners covering all major industrial hubs in India including Mumbai, Chennai, Delhi NCR, and Gujarat."
+                                    question="Do you ship nationwide?"
+                                    answer="Yes, we have logistics partners covering all major industrial hubs."
                                 />
                                 <FAQItem
                                     question="Do you provide installation support?"

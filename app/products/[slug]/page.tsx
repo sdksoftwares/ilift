@@ -48,7 +48,7 @@ export async function generateMetadata(
   const catName = product.category?.replace('_', ' ') || "Industrial Equipment"
 
   return {
-    title: `${productName} | iLift India`,
+    title: `${productName} | iLift`,
     description: `Get the best price for ${productName}. Premium ${catName} available for immediate delivery. Request a quote today.`,
     openGraph: {
       title: `${productName} - Specifications & Price`,

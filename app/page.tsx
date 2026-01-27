@@ -18,8 +18,8 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: "iLift | Premium Industrial Machinery & Lifting Equipment",
-  description: "India's leading supplier of forklifts, pallet trucks, and warehouse machinery. Get genuine parts and expert service.",
-  keywords: ["forklift india", "pallet truck", "stacker", "industrial machinery", "spare parts"],
+  description: "Leading supplier of forklifts, pallet trucks, and warehouse machinery. Get genuine parts and expert service.",
+  keywords: ["forklift", "pallet truck", "stacker", "industrial machinery", "spare parts"],
   openGraph: {
     title: "iLift Industrial Solutions",
     description: "Premium lifting equipment and machinery for your warehouse.",

@@ -40,7 +40,7 @@ export default function Footer() {
             </span>
           </Link>
           <p className="text-sm leading-relaxed text-slate-500 max-w-sm">
-            India's premier distributor of industrial material handling equipment.
+            Premier distributor of industrial material handling equipment.
             We supply certified forklifts, stackers, and genuine spare parts to
             keep your operations moving efficiently.
           </p>
