@@ -2,7 +2,7 @@ import { MetadataRoute } from 'next'
 import { client } from '@/lib/sanity'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://ilift.in'
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://ilift.co.in'
 
     // 1. Static Routes
     const staticRoutes = [
