@@ -111,13 +111,41 @@ export async function getCategories() {
 
   // 2. Add Standard Categories (Ensure these always appear)
   const standardCategories = [
-    'forklift',
+    'forklifts',
+    'forklifts_electric',
+    'forklifts_diesel',
+    'forklifts_lpg',
     'stacker',
+    'stacker_electric',
+    'stacker_manual',
+    'reach_truck',
+    'heavy_duty_forklift',
     'pallet_truck',
-    'crane',
-    'warehouse',
-    'spare_parts',
-    'tyres'
+    'pallet_truck_electric',
+    'pallet_truck_semi_electric',
+    'pallet_truck_manual',
+    'solid_tyre',
+    'solid_tyre_resilient',
+    'solid_tyre_press_on',
+    'solid_tyre_non_marking',
+    'solid_tyre_skid_steer',
+    'solid_tyre_18x7-8_4.33',
+    'solid_tyre_600-9_4.00',
+    'solid_tyre_650-10_5.00',
+    'solid_tyre_700-12_5.00',
+    'solid_tyre_815-15_7.00',
+    'solid_tyre_825-15_6.50',
+    'spares_consumables',
+    'spares_engine',
+    'spares_hydraulic',
+    'spares_electrical',
+    'spares_battery',
+    'spares_battery_wet',
+    'spares_battery_lithium',
+    'spares_brake',
+    'spares_transmission',
+    'spares_wheels',
+    'spare_parts'
   ]
 
   standardCategories.forEach(cat => productCategories.add(cat))
