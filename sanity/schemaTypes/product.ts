@@ -108,6 +108,46 @@ export default defineType({
         },
       ],
     }),
+    defineField({
+      name: 'logistics',
+      title: 'Logistics & Shipping',
+      type: 'object',
+      fields: [
+        {
+          name: 'lead_time',
+          title: 'Lead Time',
+          type: 'string',
+          description: 'e.g., 5-12 Business Days'
+        },
+        {
+          name: 'shipping_details',
+          title: 'Shipping Details',
+          type: 'text',
+          rows: 3,
+          description: 'Details about shipping, packaging, etc.'
+        }
+      ]
+    }),
+    defineField({
+      name: 'support',
+      title: 'Warranty & Support',
+      type: 'object',
+      fields: [
+        {
+          name: 'warranty_period',
+          title: 'Warranty Period',
+          type: 'string',
+          description: 'e.g., 1-Year Manufacturer Warranty'
+        },
+        {
+          name: 'support_coverage',
+          title: 'Support Coverage',
+          type: 'text',
+          rows: 3,
+          description: 'Details about spare parts, video consultations, etc.'
+        }
+      ]
+    }),
   ],
   preview: {
     select: {

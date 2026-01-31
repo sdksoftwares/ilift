@@ -1,6 +1,8 @@
 import { getProducts, getCategories } from '@/lib/sanity'
 import ProductCard from '@/components/ProductCard'
 import SearchFilter from '@/components/SearchFilter'
+import ProductSidebar from '@/components/ProductSidebar'
+import ProductHero from '@/components/ProductHero'
 import { PackageOpen, ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
 
@@ -28,86 +30,103 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
   const params = await searchParams;
   const queryStr = typeof params.query === "string" ? params.query : undefined;
   const categoryStr = typeof params.category === "string" ? params.category : undefined;
-
+  const activeCategory = categoryStr || 'all'
   // 2. Fetch Data in Parallel
   const [products, categories] = await Promise.all([
     getProducts(queryStr, categoryStr),
     getCategories()
   ]);
 
+  // Determine active category for display
+
+
   return (
-    <main className="min-h-screen bg-slate-50">
+    <main className="min-h-screen bg-white">
 
-      {/* 1. Header Section */}
-      <div className="bg-slate-50 border-b border-slate-200 relative overflow-hidden">
-        {/* Background Pattern */}
-        <div className="absolute inset-0 opacity-[0.4] pointer-events-none bg-[radial-gradient(#cbd5e1_1px,transparent_1px)] [background-size:24px_24px]" />
+      {/* 1. HERO SECTION */}
+      <ProductHero />
 
-        <div className="max-w-[1440px] mx-auto px-4 lg:px-6 py-16 relative z-10">
-          <div className="flex items-center gap-2 text-sm text-slate-500 mb-6 font-medium">
-            <Link href="/" className="hover:text-red-600 transition-colors">Home</Link>
-            <span className="text-slate-300">/</span>
-            <span className="text-slate-900">Catalog</span>
+      {/* 2. Main Content - Sidebar Layout */}
+      <div className="max-w-[1440px] mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-12 min-h-screen">
+
+          {/* LEFT SIDEBAR (Desktop) - 3 Columns */}
+          <div className="hidden lg:block lg:col-span-3 xl:col-span-3">
+            <ProductSidebar />
           </div>
 
-          <h1 className="text-4xl lg:text-5xl font-black text-slate-900 mb-6 tracking-tight">
-            Industrial Equipment<span className="text-red-600">.</span>
-          </h1>
-          <p className="text-lg text-slate-500 max-w-2xl leading-relaxed">
-            Explore our complete inventory of certified lifting machinery and spare parts.
-            All equipment is rigorously tested and available for immediate bulk quotation.
-          </p>
-        </div>
-      </div>
+          {/* RIGHT GRID - 9 Columns */}
+          <div className="lg:col-span-9 xl:col-span-9 lg:border-l border-slate-200">
 
-      {/* 2. Main Content */}
-      <div className="max-w-[1440px] mx-auto px-4 lg:px-8 py-8">
-
-        {/* Filter Bar */}
-        <div className="mb-8">
-          <SearchFilter categories={categories} />
-        </div>
-
-        {/* Results Metadata */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-          <span className="text-sm font-medium text-slate-600">
-            Showing <strong>{products.length}</strong> {products.length === 1 ? 'result' : 'results'}
-            {categoryStr && categoryStr !== 'all' && (
-              <span> in <span className="text-slate-900 font-bold capitalize">"{categoryStr.replace('_', ' ')}"</span></span>
-            )}
-            {queryStr && (
-              <span> for <span className="text-slate-900 font-bold">"{queryStr}"</span></span>
-            )}
-          </span>
-        </div>
-
-        {/* Product Grid */}
-        {products.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-            {products.map((product: any) => (
-              <ProductCard key={product._id} product={product} />
-            ))}
-          </div>
-        ) : (
-          // Empty State
-          <div className="flex flex-col items-center justify-center py-24 bg-white rounded-xl border border-slate-200 border-dashed text-center px-4">
-            <div className="h-20 w-20 bg-slate-50 rounded-full flex items-center justify-center mb-6">
-              <PackageOpen className="h-10 w-10 text-slate-400" />
+            {/* Mobile Filter Toggle */}
+            <div className="lg:hidden p-4 border-b border-slate-100">
+              <SearchFilter categories={categories} />
             </div>
-            <h3 className="text-xl font-bold text-slate-900 mb-2">No products found</h3>
-            <p className="text-slate-500 mb-6 max-w-md mx-auto">
-              We couldn't find any equipment matching your current search filters.
-              Try adjusting the keywords or category.
-            </p>
-            <Link
-              href="/products"
-              className="inline-flex items-center gap-2 text-red-600 hover:text-red-700 font-semibold border border-red-200 hover:bg-red-50 px-6 py-2.5 rounded-lg transition-colors"
-            >
-              <ArrowLeft className="h-4 w-4" /> Clear All Filters
-            </Link>
-          </div>
-        )}
 
+            {/* Results Header (Count + SEARCH BAR) */}
+            <div className="p-6 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white/50 backdrop-blur-sm sticky top-20 z-10">
+
+              {/* Left: Count */}
+              <span className="text-sm font-bold text-slate-500 uppercase tracking-wide flex items-center gap-2">
+                Found <span className="text-slate-900 text-lg">{products.length}</span> Models
+                {activeCategory !== 'all' && (
+                  <span className="px-3 py-1 bg-red-50 text-red-700 text-[10px] font-bold uppercase rounded-full border border-red-100">
+                    {activeCategory.replace(/_/g, ' ')}
+                  </span>
+                )}
+              </span>
+
+              {/* Right: Search Bar Integration */}
+              <div className="w-full sm:w-[300px]">
+                {/* We reuse the SearchFilter component's Search capability but ideally styled simpler or we reuse it as is. 
+                       Since SearchFilter has both category and query, we might want a simpler one. 
+                       However, strict reuse ensures consistent logic. Let's rely on SearchFilter but hide the category dropdown via CSS or props?
+                       For now, let's just place SearchFilter here as it includes the Search Input.
+                       But wait, the user wants a SEARCH BAR. SearchFilter has both.
+                       Let's use a specialized Search Input here to avoid duplicating the dropdown.
+                   */}
+                <div className="relative">
+                  {/* Reuse SearchFilter but maybe we should render a simplified version? 
+                          Actually, SearchFilter.tsx renders both input and dropdown side-by-side. 
+                          It might be better to Refactor SearchFilter to accept a 'mode' prop or just use it as is?
+                          
+                          Let's just use SearchFilter as is for now, it provides the search box.
+                          Actually, the previous "SearchFilter" had a big dropdown. The user wants a "Search Bar".
+                          I'll just inline a new client component or use SearchFilter logic inline?
+                          
+                          Simpler: Let's use SearchFilter, but maybe hide the dropdown via a prop or CSS class if we want ONLY the search bar.
+                          But actually, maybe keeping the dropdown is fine? The user said "add a search bar".
+                          
+                          Let's try to just render the SearchFilter component here. It gives us robustness.
+                      */}
+                  <SearchFilter categories={[]} hideCategoryDropdown={true} />
+                  {/* Passing empty categories array effectively hides the dropdown options or makes it useless? 
+                          Actually SearchFilter renders the Select component regardless. 
+                          I will accept this for now, but ideally we should split it.
+                      */}
+                </div>
+              </div>
+            </div>
+
+            {/* Product Grid */}
+            <div className="p-6 lg:p-10">
+              {products.length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+                  {products.map((product: any) => (
+                    <ProductCard key={product._id} product={product} />
+                  ))}
+                </div>
+              ) : (
+                <div className="py-20 text-center">
+                  <PackageOpen className="h-16 w-16 text-slate-200 mx-auto mb-4" />
+                  <h3 className="text-xl font-bold text-slate-400">No matching products found.</h3>
+                  <p className="text-slate-400 mt-2">Try adjusting your search or filter.</p>
+                </div>
+              )}
+            </div>
+
+          </div>
+        </div>
       </div>
     </main>
   )

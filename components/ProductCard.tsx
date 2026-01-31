@@ -2,11 +2,11 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
-import { ArrowRight, Info, Plus, ShoppingCart, Eye } from 'lucide-react'
+import { MessageSquare, CheckSquare, BarChart2 } from 'lucide-react'
 import { useCartStore } from '@/lib/store'
 import { useState, useEffect } from 'react'
-import { Button } from '@/components/ui/button'
 
 interface ProductProps {
   product: {
@@ -19,6 +19,7 @@ interface ProductProps {
     specifications?: {
       load_capacity?: number
       power_type?: string
+      lift_height?: string
       tyre_size?: string
       tyre_type?: string
       compatible_brands?: string
@@ -27,23 +28,22 @@ interface ProductProps {
 }
 
 export default function ProductCard({ product }: ProductProps) {
-  const { addItem, items, toggleCart } = useCartStore()
-  const [isAdded, setIsAdded] = useState(false)
-
   // Handle Name (Safety check for object vs string)
   const productName = typeof product.name === 'object' ? product.name.en : product.name
 
-  // Sync with Cart Store
-  useEffect(() => {
-    setIsAdded(items.some((item) => item._id === product._id))
-  }, [items, product._id])
+  // Format Category Name for display (e.g., "forklifts_electric" -> "Electric Forklift")
+  const formatCategory = (cat: string) => {
+    return cat.replace(/_/g, ' ').replace('forklifts', 'forklift').toUpperCase()
+  }
 
-  const handleAdd = (e: React.MouseEvent) => {
-    e.preventDefault() // Prevent link navigation
-    if (isAdded) {
-      toggleCart()
-      return
-    }
+  const router = useRouter()
+  const { addItem } = useCartStore()
+
+  // Handle Get Quote Click
+  const handleGetQuote = (e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+
     addItem({
       _id: product._id,
       name: productName,
@@ -52,139 +52,100 @@ export default function ProductCard({ product }: ProductProps) {
       category: product.category,
       price: product.price
     })
+
+    router.push('/enquiry')
   }
+
+
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 10 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-50px" }}
-      className="group relative flex flex-col h-full"
+      viewport={{ once: true }}
+      className="group bg-white flex flex-col items-center text-center p-6 transition-all duration-300 hover:shadow-xl border border-transparent hover:border-slate-100 min-h-[450px]"
     >
-      <Link href={`/products/${product.slug}`} className="flex-1 flex flex-col h-full bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 border border-slate-100 hover:border-slate-200 hover:-translate-y-1">
+      <Link href={`/products/${product.slug}`} className="w-full flex-1 flex flex-col items-center">
 
-        {/* 1. IMAGE AREA */}
-        <div className="relative h-64 w-full bg-slate-50 flex items-center justify-center overflow-hidden">
-
-          {/* Decorative Gradient Blob */}
-          <div className="absolute inset-0 bg-gradient-to-tr from-slate-100 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-
+        {/* 1. IMAGE */}
+        <div className="relative w-full h-[220px] mb-6 flex items-center justify-center">
           {product.imageUrl ? (
-            <div className="relative w-full h-full z-10 p-6">
-              <Image
-                src={product.imageUrl}
-                alt={productName}
-                fill
-                className="object-contain transition-transform duration-500 group-hover:scale-105 drop-shadow-sm group-hover:drop-shadow-md mix-blend-multiply"
-              />
-            </div>
+            <Image
+              src={product.imageUrl}
+              alt={productName}
+              fill
+              className="object-contain transition-transform duration-500 group-hover:scale-105"
+            />
           ) : (
-            <div className="flex items-center justify-center h-full w-full text-slate-400 text-sm">
-              No Image Available
+            <div className="w-full h-full flex items-center justify-center bg-slate-50 text-slate-300 text-sm">
+              No Image
             </div>
           )}
-
-          {/* Quick Actions Overlay (Appears on Hover) */}
-          <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
-          <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-3 opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 z-20">
-            <div className="px-3 py-1.5 bg-white/90 backdrop-blur-md rounded-full shadow-lg text-slate-700 font-semibold text-[10px] uppercase tracking-wide flex items-center gap-1.5">
-              <Eye className="h-3 w-3" /> Quick View
-            </div>
-          </div>
         </div>
 
-        {/* 2. CONTENT AREA */}
-        <div className="p-5 flex flex-col gap-3 flex-1 bg-white relative">
-
-          {/* Name */}
-          <div>
-            <h3 className="text-base font-bold text-slate-900 leading-snug line-clamp-2 group-hover:text-red-700 transition-colors min-h-[2.5rem]">
-              {productName}
-            </h3>
-
-            {/* Divider */}
-            <div className="w-8 h-0.5 bg-slate-100 group-hover:bg-red-500 transition-colors duration-500 mt-3 mb-2" />
-
-            {/* SPECIFICATIONS GRID - Dynamic based on Category */}
-            <div className="flex flex-wrap gap-x-3 gap-y-1 text-xs text-slate-500 min-h-[1.25rem]">
-              {/* 1. Machinery Logic (Forklift, Stacker, etc.) */}
-              {['forklift', 'stacker', 'pallet_truck', 'warehouse'].includes(product.category) && (
-                <>
-                  {product.specifications?.load_capacity && (
-                    <span className="flex items-center">
-                      <span className="font-semibold text-slate-700 mr-1">Load:</span> {product.specifications.load_capacity}kg
-                    </span>
-                  )}
-                  {product.specifications?.power_type && (
-                    <span className="flex items-center before:content-['•'] before:mx-1.5 before:text-slate-300">
-                      {product.specifications.power_type}
-                    </span>
-                  )}
-                </>
-              )}
-
-              {/* 2. Tyres Logic */}
-              {(product.category === 'tyres') && (
-                <>
-                  {product.specifications?.tyre_size && (
-                    <span className="font-semibold text-slate-700">{product.specifications.tyre_size}</span>
-                  )}
-                  {product.specifications?.tyre_type && (
-                    <span className="before:content-['•'] before:mx-1.5 before:text-slate-300">
-                      {product.specifications.tyre_type}
-                    </span>
-                  )}
-                </>
-              )}
-
-              {/* 3. Parts Logic */}
-              {(product.category === 'spare_parts') && product.specifications?.compatible_brands && (
-                <span className="truncate max-w-[180px]">
-                  Fits: <span className="font-medium text-slate-700">{product.specifications.compatible_brands}</span>
-                </span>
-              )}
-
-              {/* Fallback Empty Space if no specs (Maintains card height) */}
-              {!product.specifications && <span className="opacity-0">Standard Specification</span>}
-            </div>
-          </div>
-
-          <div className="mt-auto pt-2 flex items-center justify-between">
-            {/* Price */}
-            <div>
-              {product.price ? (
-                <div className="flex flex-col">
-                  <span className="text-[10px] text-slate-400 font-medium uppercase tracking-wider">Price</span>
-                  <span className="text-lg font-black text-slate-800">
-                    ₹{product.price.toLocaleString('en-IN')}
-                  </span>
-                </div>
-              ) : (
-                <div className="text-xs font-bold text-slate-500 bg-slate-100 px-2 py-1 rounded">
-                  Quote on Request
-                </div>
-              )}
-            </div>
-
-            {/* 3. ADD BUTTON */}
-            <Button
-              onClick={handleAdd}
-              size="sm"
-              variant={isAdded ? "secondary" : "default"}
-              className={`h-9 px-4 rounded-lg font-bold transition-all shadow-sm hover:shadow-md text-xs ${isAdded
-                ? 'bg-green-50 text-green-700 hover:bg-green-100 border border-green-200'
-                : 'bg-slate-900 text-white hover:bg-red-600 hover:scale-105'
-                }`}
-            >
-              {isAdded ? (
-                <span className="flex items-center gap-1.5"><div className="w-1.5 h-1.5 rounded-full bg-green-500" /> Added</span>
-              ) : (
-                <span className="flex items-center gap-1.5"><Plus className="h-3.5 w-3.5" /> Add</span>
-              )}
-            </Button>
-          </div>
+        {/* 2. HEADER INFO */}
+        <div className="w-full mb-4">
+          <h3 className="text-xl font-bold text-slate-900 uppercase mb-2 group-hover:text-red-600 transition-colors">
+            {productName}
+          </h3>
+          <p className="text-xs font-bold text-red-500 uppercase tracking-wider">
+            {formatCategory(product.category)}
+          </p>
         </div>
+
+        {/* 3. SPECIFICATIONS LIST */}
+        <div className="w-full text-left space-y-1.5 mb-6 px-2">
+          {product.specifications?.load_capacity && (
+            <div className="flex text-xs text-slate-500">
+              <span className="w-1/2">Rated Capacity :</span>
+              <span className="w-1/2 font-semibold text-red-600">{product.specifications.load_capacity}kg</span>
+            </div>
+          )}
+          {product.specifications?.lift_height && (
+            <div className="flex text-xs text-slate-500">
+              <span className="w-1/2">Max. Lifting Height :</span>
+              <span className="w-1/2 font-semibold text-red-600">{product.specifications.lift_height}</span>
+            </div>
+          )}
+          {product.specifications?.power_type && (
+            <div className="flex text-xs text-slate-500">
+              <span className="w-1/2">Power Type :</span>
+              <span className="w-1/2 font-semibold text-red-600">{product.specifications.power_type}</span>
+            </div>
+          )}
+          {/* Fallback for parts/tyres if primary specs missing */}
+          {(!product.specifications?.load_capacity && product.specifications?.compatible_brands) && (
+            <div className="flex text-xs text-slate-500">
+              <span className="w-1/2">Components :</span>
+              <span className="w-1/2 font-semibold text-red-600">Genuine Parts</span>
+            </div>
+          )}
+        </div>
+
       </Link>
-    </motion.div >
+
+      {/* 4. ACTIONS FOOTER */}
+      <div className="w-full flex items-center justify-between border-t border-slate-100 pt-5 mt-auto">
+
+        {/* View Details Arrow (Replaces Comparison) */}
+        <Link
+          href={`/products/${product.slug}`}
+          className="flex items-center gap-2 group/view text-slate-400 hover:text-red-600 transition-colors"
+        >
+          <span className="text-xs font-bold tracking-wider uppercase">View Details</span>
+
+        </Link>
+
+        {/* Get Quote Button */}
+        <button
+          onClick={handleGetQuote}
+          className="flex items-center gap-2 text-white bg-red-600 hover:bg-red-700 border border-transparent hover:shadow-lg px-5 py-2.5 rounded-full transition-all duration-300 font-bold text-xs uppercase tracking-wide group/inquiry"
+        >
+          Get Quote <MessageSquare className="w-4 h-4" />
+        </button>
+
+      </div>
+
+    </motion.div>
   )
 }

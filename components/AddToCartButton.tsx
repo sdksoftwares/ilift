@@ -27,7 +27,7 @@ export default function AddToCartButton({ product }: { product: any }) {
     addItem({
       _id: product._id,
       // Handle localized name if it exists, otherwise fallback
-      name: product.name?.en || product.name || 'Unknown Product', 
+      name: product.name?.en || product.name || 'Unknown Product',
       slug: product.slug?.current || product.slug,
       // Handle the image array (Product page returns "images": [...urls])
       imageUrl: Array.isArray(product.images) ? product.images[0] : product.imageUrl || '',
@@ -37,22 +37,21 @@ export default function AddToCartButton({ product }: { product: any }) {
   }
 
   return (
-    <Button 
+    <Button
       size="lg"
       onClick={handleAdd}
-      className={`flex-1 h-14 text-lg font-bold transition-all ${
-        isAdded 
-          ? 'bg-green-600 hover:bg-green-700 text-white' 
-          : 'bg-slate-900 hover:bg-slate-800 text-white'
-      }`}
+      className={`flex-1 h-12 text-base font-bold uppercase tracking-wider rounded-full transition-all shadow-lg hover:shadow-xl ${isAdded
+          ? 'bg-green-600 hover:bg-green-700 text-white'
+          : 'bg-red-600 hover:bg-red-700 text-white'
+        }`}
     >
       {isAdded ? (
         <>
-          <Check className="mr-2 h-5 w-5" /> In Quote List
+          <Check className="mr-2 h-5 w-5" /> Quote Requested
         </>
       ) : (
         <>
-          <Plus className="mr-2 h-5 w-5" /> Add to Enquiry List
+          Get Quote <FileText className="ml-2 h-5 w-5" />
         </>
       )}
     </Button>

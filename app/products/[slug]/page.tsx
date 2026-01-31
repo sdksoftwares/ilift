@@ -1,17 +1,30 @@
+// Imports updated
 import { client, getProduct } from '@/lib/sanity'
-import AddToCartButton from '@/components/AddToCartButton'
-import ProductImageGallery from '@/components/ProductImageGallery'
+// Removed old imports that might clutter
+import ProductDetailHero from '@/components/ProductDetailHero'
+import ProductFeatures from '@/components/ProductFeatures'
+import RecommendedProducts from '@/components/RecommendedProducts'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import {
-  CheckCircle2, Truck, ShieldCheck,
-  FileText, ArrowRight, Phone, Info
+  CheckCircle2, Truck, ArrowRight, FileText
 } from 'lucide-react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
 import { PortableText } from 'next-sanity'
+import DownloadSpecButton from '@/components/DownloadSpecButton'
+
+function toPlainText(blocks: any[] = []) {
+  if (!blocks || !Array.isArray(blocks)) return ''
+  return blocks
+    .map(block => {
+      if (block._type !== 'block' || !block.children) {
+        return ''
+      }
+      return block.children.map((child: any) => child.text).join('')
+    })
+    .join('\n\n')
+}
 
 export const revalidate = 60
 
@@ -22,7 +35,12 @@ const SIMILAR_PRODUCTS_QUERY = `
     "slug": slug.current,
     "imageUrl": images[0].asset->url,
     category,
-    price
+    price,
+    specifications {
+        load_capacity,
+        power_type,
+        lift_height
+    }
   }
 `
 
@@ -49,7 +67,7 @@ export async function generateMetadata(
 
   return {
     title: `${productName} | iLift`,
-    description: `Get the best price for ${productName}. Premium ${catName} available for immediate delivery. Request a quote today.`,
+    description: `Get the best price for ${productName}.Premium ${catName} available for immediate delivery.Request a quote today.`,
     openGraph: {
       title: `${productName} - Specifications & Price`,
       description: `Check specifications and pricing for ${productName}.`,
@@ -73,214 +91,173 @@ export default async function ProductPage(props: PageProps) {
   )
 
   const productName = product.name?.en || product.name || "Unknown Product"
-  const images = product.images || []
 
   return (
     <main className="min-h-screen bg-slate-50 font-sans pb-20">
 
-      {/* 1. COMPACT BREADCRUMB */}
-      <div className="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
-        <div className="max-w-[1280px] mx-auto px-4 lg:px-6 py-3">
-          <div className="flex items-center gap-2 text-xs text-slate-500">
-            <Link href="/" className="hover:text-red-600 transition-colors">Home</Link> /
-            <Link href="/products" className="hover:text-red-600 transition-colors">Catalog</Link> /
-            <span className="text-slate-900 font-medium truncate max-w-[300px]">{productName}</span>
-          </div>
-        </div>
-      </div>
+      {/* 1. NEW HERO SECTION (Split + Stats) */}
+      <ProductDetailHero product={product} />
 
-      <div className="max-w-[1280px] mx-auto px-4 lg:px-6 py-8">
+      {/* 3. DETAILED CONTENT (Tabs) */}
+      <div className="max-w-[1280px] mx-auto px-4 lg:px-6 py-16">
 
-        <div className="grid lg:grid-cols-12 gap-8 lg:gap-12">
-
-          {/* --- LEFT COLUMN: VISUALS + PRIMARY ACTIONS (Cols 1-5) --- */}
-          <div className="lg:col-span-5 space-y-6">
-            <ProductImageGallery images={images} name={productName} />
-
-            {/* MOVED: Primary CTAs are now here for better visibility */}
-            {/* UPDATED: Buttons are now in columns (grid) instead of a list */}
-            <div className="w-full">
-              <AddToCartButton product={product} />
+        {/* TABBED CONTENT */}
+        <div className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
+          <Tabs defaultValue="description" className="w-full">
+            <div className="bg-slate-50/50 border-b border-slate-200 px-6">
+              <TabsList className="flex w-full sm:w-auto h-16 bg-transparent gap-8">
+                <TabsTrigger
+                  value="description"
+                  className="h-full rounded-none border-b-2 border-transparent px-2 data-[state=active]:bg-transparent data-[state=active]:border-b-red-600 data-[state=active]:text-red-700 data-[state=active]:shadow-none text-slate-500 font-bold uppercase tracking-wide text-sm transition-all hover:text-slate-900"
+                >
+                  Product Overview
+                </TabsTrigger>
+                <TabsTrigger
+                  value="specs"
+                  className="h-full rounded-none border-b-2 border-transparent px-2 data-[state=active]:bg-transparent data-[state=active]:border-b-red-600 data-[state=active]:text-red-700 data-[state=active]:shadow-none text-slate-500 font-bold uppercase tracking-wide text-sm transition-all hover:text-slate-900"
+                >
+                  Technical Specifications
+                </TabsTrigger>
+                <TabsTrigger
+                  value="shipping"
+                  className="h-full rounded-none border-b-2 border-transparent px-2 data-[state=active]:bg-transparent data-[state=active]:border-b-red-600 data-[state=active]:text-red-700 data-[state=active]:shadow-none text-slate-500 font-bold uppercase tracking-wide text-sm transition-all hover:text-slate-900"
+                >
+                  Logistics & Support
+                </TabsTrigger>
+              </TabsList>
             </div>
-          </div>
 
-          {/* --- RIGHT COLUMN: INFO & TABS (Cols 6-12) --- */}
-          <div className="lg:col-span-7 flex flex-col h-full">
+            <div className="p-8 lg:p-12 min-h-[300px]">
 
-            {/* Header */}
-            <div className="mb-8">
-              <Badge variant="secondary" className="mb-3 bg-slate-100 text-slate-600 border border-slate-200 hover:bg-slate-200 rounded-sm text-[10px] uppercase tracking-widest px-2 py-1">
-                {product.category?.replace('_', ' ') || 'Industrial Equipment'}
-              </Badge>
+              {/* Description Tab */}
+              <TabsContent value="description" className="mt-0 space-y-8 animate-in fade-in-50 duration-300">
+                <div className="grid lg:grid-cols-[2fr_1fr] gap-12">
+                  <div className="prose prose-slate prose-lg max-w-none text-slate-600">
+                    <h3 className="text-2xl font-black text-slate-900 uppercase mb-6">Engineered for Excellence</h3>
+                    {product.description ? (
+                      <PortableText value={product.description} />
+                    ) : (
+                      <p>Detailed product description not available. Please check the specifications for more details.</p>
+                    )}
 
-              <h1 className="text-3xl lg:text-4xl font-extrabold text-slate-900 mb-2 leading-tight tracking-tight">
-                {productName}
-              </h1>
-
-              <p className="text-slate-500 text-base font-medium mb-6">
-                High-performance {product.category?.replace('_', ' ') || 'machinery'} engineered for industrial reliability.
-              </p>
-
-              {/* Price Block (Clean & Professional) */}
-              <div className="p-4 bg-slate-50 rounded-lg border border-slate-200 inline-block w-full sm:w-auto min-w-[250px]">
-                {product.price ? (
-                  <div>
-                    <p className="text-xs text-slate-500 font-medium mb-1">Estimated Price</p>
-                    <div className="flex items-baseline gap-2">
-                      <span className="text-3xl font-bold text-slate-900">₹{product.price.toLocaleString('en-IN')}</span>
-                      <span className="text-xs text-slate-500 font-medium bg-white px-1.5 py-0.5 rounded border border-slate-200">excl. GST</span>
-                    </div>
-                  </div>
-                ) : (
-                  <Link href="/contact" className="block">
-                    <div className="flex items-center justify-between gap-4">
-                      <div>
-                        <span className="text-lg font-bold text-blue-700">Price on Request</span>
+                    {(product.specifications?.load_capacity || product.specifications?.lift_height) && (
+                      <div className="mt-8 bg-slate-50 p-6 rounded-xl border border-slate-100">
+                        <h4 className="font-bold text-slate-900 uppercase tracking-wider text-sm mb-4">Key Highlights</h4>
+                        <ul className="space-y-2 list-none p-0 m-0">
+                          {product.specifications?.load_capacity && (
+                            <li className="flex items-center gap-3">
+                              <div className="w-2 h-2 bg-red-600 rounded-full" />
+                              <span className="font-bold text-slate-900">{product.specifications.load_capacity}kg</span>
+                              <span className="text-slate-500">Rated Load Capacity</span>
+                            </li>
+                          )}
+                          {product.specifications?.lift_height && (
+                            <li className="flex items-center gap-3">
+                              <div className="w-2 h-2 bg-red-600 rounded-full" />
+                              <span className="font-bold text-slate-900">{product.specifications.lift_height}mm</span>
+                              <span className="text-slate-500">Maximum Lifting Height</span>
+                            </li>
+                          )}
+                          {product.specifications?.power_type && (
+                            <li className="flex items-center gap-3">
+                              <div className="w-2 h-2 bg-red-600 rounded-full" />
+                              <span className="font-bold text-slate-900">{product.specifications.power_type}</span>
+                              <span className="text-slate-500">Power System</span>
+                            </li>
+                          )}
+                        </ul>
                       </div>
-                    </div>
-                  </Link>
-                )}
-              </div>
-            </div>
+                    )}
+                  </div>
 
-            {/* TABBED CONTENT */}
-            <div className="flex-1 bg-white border border-slate-200 rounded-lg shadow-sm overflow-hidden">
-              <Tabs defaultValue="description" className="w-full">
-                <div className="bg-slate-50/80 border-b border-slate-200">
-                  <TabsList className="flex w-full justify-start bg-transparent p-0 h-12 overflow-x-auto scrollbar-hide">
-                    <TabsTrigger
-                      value="description"
-                      className="h-full flex-shrink-0 rounded-none border-b-2 border-transparent px-6 data-[state=active]:bg-white data-[state=active]:border-b-red-600 data-[state=active]:text-red-700 data-[state=active]:shadow-none text-slate-600 font-semibold text-sm transition-all hover:text-slate-900"
-                    >
-                      Description
-                    </TabsTrigger>
-                    <TabsTrigger
-                      value="specs"
-                      className="h-full flex-shrink-0 rounded-none border-b-2 border-transparent px-6 data-[state=active]:bg-white data-[state=active]:border-b-red-600 data-[state=active]:text-red-700 data-[state=active]:shadow-none text-slate-600 font-semibold text-sm transition-all hover:text-slate-900"
-                    >
-                      Specifications
-                    </TabsTrigger>
-                    <TabsTrigger
-                      value="shipping"
-                      className="h-full flex-shrink-0 rounded-none border-b-2 border-transparent px-6 data-[state=active]:bg-white data-[state=active]:border-b-red-600 data-[state=active]:text-red-700 data-[state=active]:shadow-none text-slate-600 font-semibold text-sm transition-all hover:text-slate-900"
-                    >
-                      Shipping
-                    </TabsTrigger>
-                  </TabsList>
+                  {/* Tab CTA */}
+                  <div className="bg-slate-50 p-8 rounded-xl border border-slate-100 h-fit sticky top-24">
+                    <h4 className="font-black text-xl text-slate-900 mb-2">Interested in this Model?</h4>
+                    <p className="text-slate-500 text-sm mb-6">Get a custom quote based on your specific fleet requirements.</p>
+                    <Link href="/enquiry" className="flex items-center justify-center w-full py-4 bg-red-600 text-white font-bold uppercase tracking-wider rounded-lg hover:bg-red-700 transition-all shadow-lg hover:shadow-red-200">
+                      Get a Quote
+                      <ArrowRight className="ml-2 w-4 h-4" />
+                    </Link>
+                  </div>
                 </div>
+              </TabsContent>
 
-                <div className="p-6 lg:p-8 min-h-[300px]">
-
-                  {/* Description Tab */}
-                  <TabsContent value="description" className="mt-0 space-y-4 animate-in fade-in-50 duration-300">
-                    <div className="prose prose-slate prose-sm max-w-none prose-headings:font-bold prose-headings:text-slate-900 prose-p:text-slate-600 prose-li:text-slate-600">
-                      {product.description ? (
-                        <PortableText value={product.description} />
-                      ) : (
-                        <div className="flex flex-col items-center justify-center py-12 text-slate-400 bg-slate-50 rounded-lg border border-slate-100 border-dashed">
-                          <FileText className="h-10 w-10 mb-3 opacity-20" />
-                          <p className="font-medium">No detailed description available.</p>
-                          <p className="text-xs mt-1">Please contact sales for more information about this product.</p>
-                        </div>
-                      )}
-                    </div>
-                  </TabsContent>
-
-                  {/* Specs Tab */}
-                  <TabsContent value="specs" className="mt-0 animate-in fade-in-50 duration-300">
-                    <div className="border border-slate-200 rounded-lg overflow-hidden text-sm">
-                      {product.specifications ? (
-                        Object.entries(product.specifications).map(([key, value], idx) => (
-                          <div key={key} className={`flex p-4 ${idx % 2 === 0 ? 'bg-slate-50/50' : 'bg-white'} border-b border-slate-100 last:border-0`}>
-                            <span className="w-1/3 font-medium text-slate-500 capitalize">{key.replace(/_/g, ' ')}</span>
-                            <span className="w-2/3 text-slate-900 font-semibold">{String(value)}</span>
-                          </div>
-                        ))
-                      ) : (
-                        <div className="p-12 text-slate-500 text-center bg-slate-50 rounded-lg border border-slate-200 border-dashed">
-                          <p>Technical specifications sheet available upon request.</p>
-                        </div>
-                      )}
-                    </div>
-                  </TabsContent>
-
-                  {/* Shipping Tab */}
-                  <TabsContent value="shipping" className="mt-0 animate-in fade-in-50 duration-300">
-                    <div className="space-y-6 text-sm text-slate-600">
-                      <div className="flex gap-4 items-start p-4 bg-slate-50 rounded-lg border border-slate-100">
-                        <div className="bg-white p-2 rounded-full shadow-sm">
-                          <Truck className="h-5 w-5 text-blue-600" />
-                        </div>
-                        <div>
-                          <p className="font-bold text-slate-900 text-base mb-1">Standard Delivery</p>
-                          <p className="leading-relaxed">We utilize specialized heavy logistics partners for safe transport. Estimated delivery timeline is <strong>5-10 business days</strong> post-dispatch, depending on your location.</p>
-                        </div>
+              {/* Specs Tab */}
+              <TabsContent value="specs" className="mt-0 animate-in fade-in-50 duration-300">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-4">
+                  {product.specifications ? (
+                    Object.entries(product.specifications).map(([key, value], idx) => (
+                      <div key={key} className="flex items-center justify-between py-4 border-b border-slate-100 group hover:bg-slate-50 px-4 -mx-4 rounded-lg transition-colors">
+                        <span className="font-medium text-slate-500 capitalize">{key.replace(/_/g, ' ')}</span>
+                        <span className="text-slate-900 font-bold">{String(value)}</span>
                       </div>
-
-                      <div className="flex gap-4 items-start p-4 bg-slate-50 rounded-lg border border-slate-100">
-                        <div className="bg-white p-2 rounded-full shadow-sm">
-                          <CheckCircle2 className="h-5 w-5 text-green-600" />
-                        </div>
-                        <div>
-                          <p className="font-bold text-slate-900 text-base mb-1">Stock Availability</p>
-                          <p className="leading-relaxed">Inventory levels fluctuate daily. Adding this item to your enquiry allows our team to confirm real-time stock status and reserve units for you.</p>
-                        </div>
-                      </div>
+                    ))
+                  ) : (
+                    <div className="p-12 text-slate-500 text-center col-span-2">
+                      Technical specifications sheet available upon request.
                     </div>
-                  </TabsContent>
+                  )}
+
+                  <div className="col-span-full mt-8 flex justify-center">
+                    <DownloadSpecButton
+                      productName={productName}
+                      description={toPlainText(product.description)}
+                      specifications={product.specifications || {}}
+                      logistics={product.logistics}
+                      support={product.support}
+                    />
+                  </div>
                 </div>
-              </Tabs>
-            </div>
+              </TabsContent>
 
-          </div>
+              {/* Shipping Tab */}
+              <TabsContent value="shipping" className="mt-0 animate-in fade-in-50 duration-300">
+                <div className="grid md:grid-cols-2 gap-8">
+                  <div className="flex gap-4 items-start p-6 bg-blue-50/50 rounded-xl border border-blue-100">
+                    <div className="bg-white p-3 rounded-full shadow-sm text-blue-600">
+                      <Truck className="h-6 w-6" />
+                    </div>
+                    <div>
+                      <p className="text-slate-600 leading-relaxed whitespace-pre-line">
+                        {product.logistics?.shipping_details || "Shipping details available upon request."}
+                        <br />
+                        {product.logistics?.lead_time && (
+                          <>
+                            Typical lead time: <span className="font-semibold text-slate-900">{product.logistics.lead_time}</span>.
+                          </>
+                        )}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex gap-4 items-start p-6 bg-green-50/50 rounded-xl border border-green-100">
+                    <div className="bg-white p-3 rounded-full shadow-sm text-green-600">
+                      <CheckCircle2 className="h-6 w-6" />
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-slate-900 text-lg mb-2">Warranty & Support</h4>
+                      <p className="text-slate-600 leading-relaxed whitespace-pre-line">
+                        {product.support?.warranty_period && (
+                          <>
+                            Every unit comes with a <span className="font-semibold text-slate-900">{product.support.warranty_period}</span>.
+                            <br />
+                          </>
+                        )}
+                        {product.support?.support_coverage || "Support coverage details available upon request."}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </TabsContent>
+            </div>
+          </Tabs>
         </div>
 
-        {/* SIMILAR PRODUCTS */}
-        {similarProducts.length > 0 && (
-          <div className="mt-20 pt-10 border-t border-slate-200">
-            <div className="flex items-center justify-between mb-8">
-              <h2 className="text-xl font-bold text-slate-900">Similar Machinery</h2>
-              {/* RESTORED: View Catalog Button */}
-              <Link href="/products" className="hidden sm:flex items-center gap-2 text-red-600 font-semibold hover:text-red-700 hover:underline transition-all">
-                View Full Catalog <ArrowRight className="h-4 w-4" />
-              </Link>
-            </div>
+        {/* 4. RECOMMENDED PRODUCTS (Zoomlion Style) */}
+        <RecommendedProducts products={similarProducts} />
 
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-              {similarProducts.map((sim: any) => (
-                <Link key={sim._id} href={`/products/${sim.slug}`} className="group bg-white border border-slate-200 rounded-lg hover:border-red-200 hover:shadow-lg transition-all duration-300 overflow-hidden">
-                  <div className="aspect-[4/3] relative p-6 bg-white flex items-center justify-center border-b border-slate-100 group-hover:bg-slate-50/50 transition-colors">
-                    {sim.imageUrl ? (
-                      <Image
-                        src={sim.imageUrl}
-                        alt={sim.name}
-                        fill
-                        className="object-contain p-2 group-hover:scale-105 transition-transform duration-500"
-                      />
-                    ) : <div className="w-full h-full bg-slate-50 flex items-center justify-center text-xs text-slate-400">No Image</div>}
-                  </div>
-                  <div className="p-4">
-                    <h4 className="font-bold text-slate-900 text-sm truncate group-hover:text-red-600 transition-colors">{sim.name}</h4>
-                    <p className="text-xs text-slate-500 mt-1 capitalize font-medium">{sim.category?.replace('_', ' ')}</p>
-                    <div className="mt-3 text-sm font-semibold text-slate-700">
-                      {sim.price ? `₹${sim.price.toLocaleString('en-IN')}` : <span className="text-xs text-blue-600 bg-blue-50 px-2 py-0.5 rounded">View Price</span>}
-                    </div>
-                  </div>
-                </Link>
-              ))}
-            </div>
-
-            {/* Mobile View All Button */}
-            <div className="mt-8 sm:hidden">
-              <Link
-                href="/products"
-                className="flex items-center justify-center gap-2 w-full py-3 bg-white border border-slate-200 rounded-lg text-slate-700 font-medium hover:bg-slate-50"
-              >
-                View Full Catalog <ArrowRight className="h-4 w-4" />
-              </Link>
-            </div>
-          </div>
-        )}
+        {/* 5. SERVICES ROW (Bottom) */}
+        <ProductFeatures />
 
       </div>
     </main>

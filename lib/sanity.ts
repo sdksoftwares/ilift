@@ -1,6 +1,7 @@
 // lib/sanity.ts
 import { createClient } from 'next-sanity'
 import imageUrlBuilder from '@sanity/image-url'
+import { PRODUCTS_MENU, SPARE_PARTS_MENU } from '@/lib/constants'
 
 // 1. Configuration
 export const client = createClient({
@@ -48,7 +49,9 @@ export const PRODUCT_BY_SLUG_QUERY = `
     "images": images[].asset->url,
     "brochureUrl": brochure.asset->url,
     category,
-    price
+    price,
+    logistics,
+    support
   }
 `
 
@@ -84,7 +87,9 @@ export async function getProducts(queryStr?: string, categoryStr?: string) {
 
   // Add Category Filter
   if (categoryStr && categoryStr !== 'all') {
-    filters.push(`category == "${categoryStr}"`)
+    // UPDATED: Use string::startsWith for reliable prefix matching (e.g., 'forklifts' matches 'forklifts_electric')
+    // We also check defined(category) to avoid errors on schemaless documents
+    filters.push(`defined(category) && string::startsWith(category, "${categoryStr}")`)
   }
 
   // Combine filters
@@ -109,44 +114,35 @@ export async function getCategories() {
   // 1. Get categories from actual products
   const productCategories = new Set(products.map((p: any) => p.category).filter(Boolean))
 
-  // 2. Add Standard Categories (Ensure these always appear)
-  const standardCategories = [
-    'forklifts',
-    'forklifts_electric',
-    'forklifts_diesel',
-    'forklifts_lpg',
-    'stacker',
-    'stacker_electric',
-    'stacker_manual',
-    'reach_truck',
-    'heavy_duty_forklift',
-    'pallet_truck',
-    'pallet_truck_electric',
-    'pallet_truck_semi_electric',
-    'pallet_truck_manual',
-    'solid_tyre',
-    'solid_tyre_resilient',
-    'solid_tyre_press_on',
-    'solid_tyre_non_marking',
-    'solid_tyre_skid_steer',
-    'solid_tyre_18x7-8_4.33',
-    'solid_tyre_600-9_4.00',
-    'solid_tyre_650-10_5.00',
-    'solid_tyre_700-12_5.00',
-    'solid_tyre_815-15_7.00',
-    'solid_tyre_825-15_6.50',
-    'spares_consumables',
-    'spares_engine',
-    'spares_hydraulic',
-    'spares_electrical',
-    'spares_battery',
-    'spares_battery_wet',
-    'spares_battery_lithium',
-    'spares_brake',
-    'spares_transmission',
-    'spares_wheels',
-    'spare_parts'
-  ]
+  // 2. Add Standard Categories (Dynamically generated from Constants)
+  const standardCategories = new Set<string>()
+
+  // Helper to extract category from href
+  const extractCategory = (href: string) => {
+    const match = href.match(/category=([^&]*)/)
+    if (match && match[1]) {
+      standardCategories.add(match[1])
+    }
+  }
+
+  // Iterate PRODUCTS_MENU
+  PRODUCTS_MENU.forEach(item => {
+    extractCategory(item.href)
+    item.subcategories?.forEach(sub => extractCategory(sub.href))
+  })
+
+  // Iterate SPARE_PARTS_MENU
+  SPARE_PARTS_MENU.forEach(item => {
+    extractCategory(item.href)
+    // @ts-ignore - Check for subcategories if they exist on the union type
+    if (item.subcategories) {
+      // @ts-ignore
+      item.subcategories.forEach(sub => extractCategory(sub.href))
+    }
+  })
+
+  // Add hardcoded 'spare_parts' if not present, as it's a parent category often used
+  standardCategories.add('spare_parts')
 
   standardCategories.forEach(cat => productCategories.add(cat))
 
