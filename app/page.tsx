@@ -1,6 +1,7 @@
 import { getProducts } from '@/lib/sanity'
-import FeaturedProductCard from '@/components/FeaturedProductCard'
+import FeaturedProducts from '@/components/FeaturedProducts'
 import Hero from '@/components/Hero'
+import ExploreCategories from '@/components/ExploreCategories'
 
 import CartDrawer from '@/components/CartDrawer'
 import Link from 'next/link'
@@ -31,7 +32,6 @@ export const metadata: Metadata = {
 export default async function Home() {
   // 1. Fetch Featured Products
   const products = await getProducts()
-  const featuredProducts = products.slice(0, 8)
 
   return (
     <main className="min-h-screen bg-slate-50 font-sans">
@@ -39,54 +39,11 @@ export default async function Home() {
       {/* 1. HERO SECTION (Carousel) */}
       <Hero />
 
-      {/* 2. FEATURED MACHINERY & PARTS (Light Theme) */}
-      <section id="featured" className="relative bg-slate-50 py-20 lg:py-24">
+      {/* 2. EXPLORE CATEGORIES */}
+      <ExploreCategories />
 
-        <div className="relative z-10 max-w-[1440px] mx-auto px-4 lg:px-6">
-
-          {/* Section Header */}
-          <div className="flex flex-col items-center text-center mb-12 border-b-0">
-            <h2 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tight mb-4">
-              Our Top Machinery Products
-            </h2>
-            <p className="text-slate-500 text-lg max-w-2xl mx-auto mb-8">
-              Precision-engineered machinery and genuine industrial components for your operations.
-            </p>
-
-            {/* Simplified View Catalog Link - Centered */}
-            <Link
-              href="/products"
-              className="inline-flex items-center gap-2 text-red-600 font-bold hover:text-red-700 hover:gap-3 transition-all uppercase tracking-wide text-sm bg-red-50 px-6 py-2 rounded-full hover:bg-red-100"
-            >
-              View Full Catalog <ArrowRight className="h-4 w-4" />
-            </Link>
-          </div>
-
-          {/* Product Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-            {featuredProducts.length > 0 ? (
-              featuredProducts.map((product: any) => (
-                <FeaturedProductCard key={product._id} product={product} />
-              ))
-            ) : (
-              <div className="col-span-full text-center py-20 bg-slate-50 rounded-xl border border-slate-100">
-                <p className="text-lg text-slate-400">Loading premium inventory...</p>
-              </div>
-            )}
-          </div>
-
-          {/* Mobile View All Button */}
-          <div className="mt-12 sm:hidden">
-            <Link
-              href="/products"
-              className="flex items-center justify-center gap-2 w-full py-4 bg-white border border-slate-200 rounded-xl text-slate-700 font-medium hover:bg-slate-50"
-            >
-              View Full Catalog <ArrowRight className="h-4 w-4" />
-            </Link>
-          </div>
-
-        </div>
-      </section>
+      {/* 2. FEATURED MACHINERY & PARTS (Interactive Component) */}
+      <FeaturedProducts products={products} />
 
       {/* 3. WHY CHOOSE iLIFT (Trust Signals) */}
       <section className="bg-white py-24 border-y border-slate-100">
@@ -154,48 +111,6 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* 4. PRODUCT CATEGORIES OVERVIEW */}
-      <section className="py-24 max-w-[1440px] mx-auto px-4 lg:px-6">
-        <div className="flex flex-col md:flex-row items-end justify-between gap-6 mb-12">
-          <div>
-            <h2 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tight mb-2">Explore Categories</h2>
-            <p className="text-slate-500 text-lg">Browse our comprehensive catalog by equipment type.</p>
-          </div>
-          <Link href="/products" className="text-red-600 font-bold hover:text-red-700 flex items-center gap-2 transition-colors">
-            View All Categories <ArrowRight className="h-4 w-4" />
-          </Link>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {[
-            { name: "Forklifts", desc: "Heavy-duty diesel & electric forklifts", icon: Truck, href: "/products?category=forklift" },
-            { name: "Electric Stackers", desc: "Efficient vertical storage solutions", icon: Layers, href: "/products?category=stacker" },
-            { name: "Pallet Trucks", desc: "Manual & battery operated movers", icon: Package, href: "/products?category=pallet_truck" },
-            { name: "Warehouse Equipment", desc: "Essential tools for logistics", icon: Factory, href: "/products?category=warehouse" },
-            { name: "Genuine Spare Parts", desc: "OEM parts for all major brands", icon: Zap, href: "/products?category=spare_parts" },
-            { name: "Services & AMCs", desc: "Expert maintenance & support", icon: Wrench, href: "/services" },
-          ].map((cat, idx) => (
-            <Link
-              key={cat.name}
-              href={cat.href}
-              className="group relative bg-white p-8 rounded-2xl border border-slate-100 shadow-sm hover:shadow-xl hover:border-red-100 transition-all duration-300 flex items-start gap-6 hover:-translate-y-1"
-            >
-              <div className="absolute top-0 right-0 p-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                <ArrowRight className="h-5 w-5 text-red-500 -rotate-45 group-hover:rotate-0 transition-transform duration-300" />
-              </div>
-
-              <div className="w-12 h-12 rounded-lg bg-slate-50 group-hover:bg-red-50 border border-slate-100 group-hover:border-red-100 flex items-center justify-center flex-shrink-0 transition-colors">
-                <cat.icon className="h-6 w-6 text-slate-500 group-hover:text-red-600 transition-colors" />
-              </div>
-
-              <div>
-                <h3 className="text-lg font-bold text-slate-900 group-hover:text-red-700 transition-colors mb-1">{cat.name}</h3>
-                <p className="text-sm text-slate-500 font-medium">{cat.desc}</p>
-              </div>
-            </Link>
-          ))}
-        </div>
-      </section>
 
       {/* 5. HOW IT WORKS (Enquiry Process) */}
       <section className="bg-slate-900 text-white py-20">

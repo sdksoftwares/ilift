@@ -35,11 +35,67 @@ interface Resource {
     description?: string;
 }
 
-const CATEGORIES: { id: string; label: string }[] = [
+interface Category {
+    id: string;
+    label: string;
+    subcategories?: { id: string; label: string }[];
+}
+
+const CATEGORIES: Category[] = [
     { id: 'all', label: 'All Resources' },
-    { id: 'forklift', label: 'Forklifts' },
-    { id: 'stacker', label: 'Stackers' },
-    { id: 'pallet_truck', label: 'Pallet Trucks' },
+    {
+        id: 'forklift',
+        label: 'Forklifts',
+        subcategories: [
+            { id: 'forklift_diesel', label: 'Diesel Forklifts' },
+            { id: 'forklift_electric', label: 'Electric Forklifts' },
+            { id: 'forklift_lpg', label: 'LPG Forklifts' },
+            { id: 'forklift_rough', label: 'Rough Terrain' },
+        ]
+    },
+    {
+        id: 'stacker',
+        label: 'Stackers',
+        subcategories: [
+            { id: 'stacker_manual', label: 'Manual Stackers' },
+            { id: 'stacker_semi', label: 'Semi-Electric' },
+            { id: 'stacker_electric', label: 'Full Electric' },
+        ]
+    },
+    {
+        id: 'reach_truck',
+        label: 'Reach Trucks',
+        subcategories: [
+            { id: 'reach_sit', label: 'Sit-Down Type' },
+            { id: 'reach_stand', label: 'Stand-On Type' },
+        ]
+    },
+    {
+        id: 'heavy_duty',
+        label: 'Heavy Duty',
+        subcategories: [
+            { id: 'heavy_diesel', label: '10-16 Ton Diesel' },
+            { id: 'heavy_container', label: 'Container Handler' },
+        ]
+    },
+    {
+        id: 'pallet_truck',
+        label: 'Pallet Trucks',
+        subcategories: [
+            { id: 'pallet_manual', label: 'Hand Pallet Trucks' },
+            { id: 'pallet_electric', label: 'Electric Pallet Trucks' },
+        ]
+    },
+    {
+        id: 'solid_tyre',
+        label: 'Solid Tyres',
+        subcategories: [
+            { id: 'tyre_cushion', label: 'Cushion Tyres' },
+            { id: 'tyre_pneumatic', label: 'Pneumatic Tyres' },
+            { id: 'tyre_non_marking', label: 'Non-Marking' },
+        ]
+    },
+    { id: 'spare_parts', label: 'Spare Parts' },
     { id: 'video', label: 'Video Tutorials' },
     { id: 'manual', label: 'Manuals' },
 ];
@@ -143,39 +199,68 @@ export default function LibraryPage() {
                         </motion.div>
                     </div>
 
-                    {/* SEARCH & FILTER BAR */}
+                    {/* SEARCH BAR - CENTERED */}
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.2, duration: 0.6 }}
-                        className="bg-white/10 backdrop-blur-xl border border-white/10 rounded-2xl p-2 shadow-2xl ring-1 ring-black/5 flex flex-col md:flex-row gap-2"
+                        className="mb-10 flex justify-center"
                     >
-                        <div className="relative flex-1 group">
+                        <div className="relative group w-full max-w-2xl">
                             <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 h-5 w-5 group-focus-within:text-red-400 transition-colors" />
                             <Input
                                 placeholder="Search manuals, videos, guides..."
-                                className="pl-12 h-14 bg-transparent border-none text-white focus-visible:ring-0 placeholder:text-slate-400 text-lg font-medium"
+                                className="pl-12 h-14 bg-white/10 backdrop-blur-xl border border-white/10 rounded-2xl text-white focus-visible:ring-0 placeholder:text-slate-400 text-lg font-medium shadow-xl w-full"
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
                             />
                         </div>
-                        <div className="hidden md:block w-px bg-white/10 my-3" />
-                        <div className="flex overflow-x-auto gap-2 p-2 md:p-0 no-scrollbar items-center">
-                            {CATEGORIES.map(cat => (
-                                <button
-                                    key={cat.id}
-                                    onClick={() => setActiveCategory(cat.id)}
-                                    className={`px-5 py-2.5 rounded-xl text-sm font-semibold whitespace-nowrap transition-all duration-300 ${activeCategory === cat.id
-                                        ? 'bg-red-600 text-white shadow-[0_0_20px_rgba(220,38,38,0.4)] transform scale-105'
-                                        : 'text-slate-300 hover:bg-white/5 hover:text-white border border-transparent hover:border-white/10'
-                                        }`}
-                                >
-                                    {cat.label}
-                                </button>
-                            ))}
-                        </div>
                     </motion.div>
+
                 </div>
+
+                {/* CATEGORIES - FULL WIDTH */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.3, duration: 0.6 }}
+                    className="w-full max-w-[95vw] mx-auto flex justify-center items-center gap-1 md:gap-3 px-4 pb-8"
+                >
+                    {CATEGORIES.map(cat => (
+                        <div key={cat.id} className="relative group shrink-0">
+                            <button
+                                onClick={() => !cat.subcategories && setActiveCategory(cat.id)}
+                                className={`px-4 py-2 md:px-5 md:py-2.5 rounded-xl text-xs md:text-sm font-semibold whitespace-nowrap transition-all duration-300 flex items-center gap-2 ${activeCategory === cat.id || (cat.subcategories && cat.subcategories.some(sub => sub.id === activeCategory))
+                                    ? 'bg-red-600 text-white shadow-[0_0_20px_rgba(220,38,38,0.4)] transform scale-105'
+                                    : 'text-slate-300 hover:bg-white/5 hover:text-white border border-transparent hover:border-white/10'
+                                    }`}
+                            >
+                                {cat.label}
+                                {cat.subcategories && <ChevronDown className="h-3 w-3 md:h-4 md:w-4 opacity-70 group-hover:rotate-180 transition-transform" />}
+                            </button>
+
+                            {/* Dropdown Menu */}
+                            {cat.subcategories && (
+                                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-48 bg-slate-900 border border-slate-700 rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 overflow-hidden backdrop-blur-xl">
+                                    <div className="py-1">
+                                        {cat.subcategories.map(sub => (
+                                            <button
+                                                key={sub.id}
+                                                onClick={() => setActiveCategory(sub.id)}
+                                                className={`block w-full text-left px-4 py-2 text-sm transition-colors ${activeCategory === sub.id
+                                                    ? 'bg-red-600 text-white'
+                                                    : 'text-slate-300 hover:bg-white/10 hover:text-white'
+                                                    }`}
+                                            >
+                                                {sub.label}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    ))}
+                </motion.div>
             </div>
 
             {/* RESOURCE GRID */}

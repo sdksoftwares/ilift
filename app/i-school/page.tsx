@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion'
 import { FileText, Play, Wrench, BookOpen, CheckCircle, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
+import NextImage from 'next/image'
 import { Button } from '@/components/ui/button'
 import dynamic from 'next/dynamic'
 
@@ -11,35 +12,72 @@ const Hero3D = dynamic(() => import('@/components/Hero3D'), { ssr: false })
 
 const TRAINING_MODULES = [
     {
-        title: "Forklift Series",
+        title: "Forklifts",
         description: "Complete operation manuals, safety checklists, and maintenance guides for all i-Lift forklift models.",
         icon: (
-            <svg className="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M3 13h2l2-7h6l2 7h2v5h-2M15 13v5M19 18h2v-5h-2M5 18H3v-5h2M9 13v5M5 18a2 2 0 100 4 2 2 0 000-4zm14 0a2 2 0 100 4 2 2 0 000-4z" />
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 10h6m-3-7v7" />
-            </svg>
+            <NextImage
+                src="/Icons/forklift.svg"
+                alt="Forklift"
+                width={24}
+                height={24}
+                className="w-full h-full object-contain invert opacity-90 group-hover:opacity-100 transition-opacity"
+            />
         ),
-        fallbackIcon: "forklift", // Just metadata for reference
         link: "/i-school/access?category=forklift"
     },
     {
-        title: "Stacker Series",
+        title: "Reach Trucks",
+        description: "Specialized training for high-reach operations, stability control, and aisle maneuvering.",
+        icon: (
+            <NextImage
+                src="/Icons/reachtruck.svg"
+                alt="Reach Truck"
+                width={24}
+                height={24}
+                className="w-full h-full object-contain invert opacity-90 group-hover:opacity-100 transition-opacity"
+            />
+        ),
+        link: "/i-school/access?category=reach_truck"
+    },
+    {
+        title: "Stackers",
         description: "Best practices for efficient stacking, battery charging protocols, and common troubleshooting.",
         icon: (
-            <svg className="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v1" />
-            </svg>
+            <NextImage
+                src="/Icons/stacker.svg"
+                alt="Stacker"
+                width={24}
+                height={24}
+                className="w-full h-full object-contain invert opacity-90 group-hover:opacity-100 transition-opacity"
+            />
         ),
         link: "/i-school/access?category=stacker"
+    },
+    {
+        title: "Heavy Duty",
+        description: "Advanced safety protocols for handling heavy loads and operating high-capacity machinery.",
+        icon: (
+            <NextImage
+                src="/Icons/heavyduty.svg"
+                alt="Heavy Duty"
+                width={24}
+                height={24}
+                className="w-full h-full object-contain invert opacity-90 group-hover:opacity-100 transition-opacity"
+            />
+        ),
+        link: "/i-school/access?category=heavy_duty"
     },
     {
         title: "Pallet Trucks",
         description: "Daily inspection guides and quick-fix tutorials to keep your pallet trucks rolling smoothly.",
         icon: (
-            <svg className="h-6 w-6 text-red-600" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" strokeWidth="2">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M4 16h2l1-4h8l1 4h2v3h-2M16 16v3M20 19h1.5v-3h-1.5M4 19h-1.5v-3h1.5M8 16v3M6 19a2 2 0 100 4 2 2 0 000-4zm12 0a2 2 0 100 4 2 2 0 000-4z" />
-            </svg>
+            <NextImage
+                src="/Icons/pallettruck.svg"
+                alt="Pallet Truck"
+                width={24}
+                height={24}
+                className="w-full h-full object-contain invert opacity-90 group-hover:opacity-100 transition-opacity"
+            />
         ),
         link: "/i-school/access?category=pallet_truck"
     },
@@ -225,7 +263,7 @@ export default function ISchoolPage() {
                         </motion.div>
                     </div>
 
-                    <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                         {TRAINING_MODULES.map((module, idx) => (
                             <Link key={idx} href={module.link} className="block group">
                                 <motion.div

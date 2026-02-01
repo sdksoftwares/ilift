@@ -84,6 +84,7 @@ export default function FeaturedProductCard({ product }: ProductProps) {
             </div>
           )}
 
+
           {/* Quick Actions Overlay (Appears on Hover) */}
           <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
           <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-3 opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 z-20">
@@ -92,16 +93,15 @@ export default function FeaturedProductCard({ product }: ProductProps) {
             </div>
           </div>
 
-
-          {/* Category Tag - REMOVED */}
-
         </div>
 
         {/* 2. CONTENT AREA */}
         <div className="p-6 flex flex-col gap-4 flex-1 bg-white relative">
 
           {/* Name & Divider */}
-          <div className="space-y-3">
+          <div className="space-y-2">
+
+
             <h3 className="text-lg font-bold text-slate-900 leading-snug line-clamp-2 group-hover:text-red-700 transition-colors min-h-[3rem]">
               {productName}
             </h3>
@@ -164,7 +164,7 @@ export default function FeaturedProductCard({ product }: ProductProps) {
                 </div>
               ) : (
                 <div className="text-sm font-bold text-slate-500 bg-slate-100 px-3 py-1 rounded-md">
-                  Quote on Request
+                  View Details
                 </div>
               )}
             </div>

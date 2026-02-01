@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Download, BookOpen } from 'lucide-react'
 
 // --- SLIDE DATA ---
 type Slide = {
@@ -31,8 +31,8 @@ const SLIDES: Slide[] = [
     type: 'image',
     src: "/images/herobanner2.jpeg",
     alt: "Hero Banner 2",
-    title: "Power. Precision. Performance.",
-    description: "Dominating the industry with a versatile range: Electric, Diesel, LPG, and Reach Trucks. Engineered for maximum productivity in every environment.",
+    title: "Redefining Heavy Lifting Standards.",
+    description: "Experience unmatched efficiency with our premium fleet of Electric, Diesel, and specialized Reach Trucks. Built to dominate any industrial terrain.",
     ctaPrimary: { text: "Explore Our Fleet", href: "/products" },
     ctaSecondary: { text: "Fast Enquiry", href: "/enquiry" },
     objectPosition: '50% 80%'
@@ -41,8 +41,8 @@ const SLIDES: Slide[] = [
     id: 3,
     type: 'video',
     src: "/images/vft1.mp4",
-    title: "Advanced Material Handling Solutions",
-    description: "Experience superior performance with our next-generation forklifts, built for reliability and global industrial demands.",
+    title: "Next-Gen Material Handling Innovations",
+    description: "Elevate your operations with state-of-the-art forklifts designed for reliability, speed, and global industrial compliance.",
     ctaPrimary: { text: "View Products", href: "/products" },
     ctaSecondary: { text: "Contact Sales", href: "/contact" },
     objectPosition: 'center top' // Fix video cropping
@@ -51,18 +51,18 @@ const SLIDES: Slide[] = [
     id: 4,
     type: 'video',
     src: "/images/stacker.mp4",
-    title: "Maximize Your Space",
-    description: "Electric & Manual Stackers designed for precision in tight aisles and vertical storage optimization.",
+    title: "Precision Stacking & Storage Optimization",
+    description: "Maximize your warehouse potential with high-performance stackers engineered for narrow aisles and vertical mastery.",
     ctaPrimary: { text: "View Stackers", href: "/products?category=stacker" },
-    ctaSecondary: { text: "Download Brochure", href: "/resources" },
+    ctaSecondary: { text: "See Manuals", href: "/i-school" },
     objectPosition: 'center center'
   },
   {
     id: 5,
     type: 'video',
     src: "/images/tyre.mp4",
-    title: "Unstoppable Durability",
-    description: "Premium solid and pneumatic industrial tyres engineered for long life, traction, and efficiency on any terrain.",
+    title: "Engineered for Unmatched Durability & Traction",
+    description: "Industrial-grade solid and pneumatic tyres designed/tested for extreme longevity and superior grip on prolonged shifts.",
     ctaPrimary: { text: "View Tyres", href: "/products?category=solid_tyre" },
     ctaSecondary: { text: "Get Quote", href: "/enquiry" },
     objectPosition: 'center center'
@@ -194,7 +194,12 @@ export default function Hero() {
                       </a>
                     )}
                     {SLIDES[current].ctaSecondary && (
-                      <a href={SLIDES[current].ctaSecondary.href} className="px-6 py-3 sm:px-8 sm:py-4 text-sm sm:text-base bg-transparent hover:bg-white/10 text-white font-bold uppercase tracking-wider rounded shadow-lg transition-colors border-2 border-white backdrop-blur-sm">
+                      <a
+                        href={SLIDES[current].ctaSecondary.href}
+                        className={`px-6 py-3 sm:px-8 sm:py-4 text-sm sm:text-base bg-transparent hover:bg-white/10 text-white font-bold uppercase tracking-wider rounded shadow-lg transition-colors border-2 border-white backdrop-blur-sm flex items-center gap-2`}
+                      >
+                        {SLIDES[current].ctaSecondary.text === "Download Brochure" && <Download size={20} />}
+                        {SLIDES[current].ctaSecondary.text === "See Manuals" && <BookOpen size={20} />}
                         {SLIDES[current].ctaSecondary.text}
                       </a>
                     )}
