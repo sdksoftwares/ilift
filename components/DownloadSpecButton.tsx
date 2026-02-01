@@ -43,7 +43,17 @@ export default function DownloadSpecButton({
 
         if (specifications) {
             Object.entries(specifications).forEach(([key, value]) => {
-                content += `${key.replace(/_/g, ' ').toUpperCase()}: ${value}\n`
+                if (key === 'customSpecs' && Array.isArray(value)) {
+                    // Handle Custom Specs Array
+                    value.forEach((item: any) => {
+                        if (item.key && item.value) {
+                            content += `${item.key.toUpperCase()}: ${item.value}\n`
+                        }
+                    })
+                } else {
+                    // Standard Specs
+                    content += `${key.replace(/_/g, ' ').toUpperCase()}: ${value}\n`
+                }
             })
         } else {
             content += `Technical specifications available upon request.\n`

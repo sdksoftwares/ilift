@@ -22,6 +22,7 @@ interface ProductProps {
       tyre_size?: string
       tyre_type?: string
       compatible_brands?: string
+      customSpecs?: any[]
     }
   }
 }
@@ -143,6 +144,15 @@ export default function FeaturedProductCard({ product }: ProductProps) {
                 <span className="text-xs truncate">
                   Fits: <span className="font-medium text-slate-700">{product.specifications.compatible_brands}</span>
                 </span>
+              )}
+
+              {/* Fallback to Custom Specs if standard specs are missing */}
+              {(!product.specifications?.load_capacity && !product.specifications?.tyre_size && !product.specifications?.compatible_brands && product.specifications?.customSpecs) && (
+                Array.isArray(product.specifications.customSpecs) && product.specifications.customSpecs.slice(0, 2).map((spec: any, idx: number) => (
+                  <span key={idx} className="flex items-center text-slate-500">
+                    <span className="font-semibold text-slate-700 mr-1">{spec.key}:</span> {spec.value}
+                  </span>
+                ))
               )}
 
               {/* Fallback Empty Space if no specs (Maintains card height) */}

@@ -28,14 +28,18 @@ const productCardProjection = `
   "slug": slug.current,
   "imageUrl": images[0].asset->url,
   category,
+  "subCategory": coalesce(sub_category_forklift, sub_category_stacker, sub_category_pallet_truck, sub_category_tyres, sub_category_spares),
   price,
+  isFeatured,
+  featuredRank,
   specifications {
     load_capacity,
     power_type,
     lift_height,
     tyre_size,
     tyre_type,
-    compatible_brands
+    compatible_brands,
+    customSpecs
   }
 `
 
@@ -49,6 +53,7 @@ export const PRODUCT_BY_SLUG_QUERY = `
     "images": images[].asset->url,
     "brochureUrl": brochure.asset->url,
     category,
+    "subCategory": coalesce(sub_category_forklift, sub_category_stacker, sub_category_pallet_truck, sub_category_tyres, sub_category_spares),
     price,
     logistics,
     support
@@ -87,9 +92,16 @@ export async function getProducts(queryStr?: string, categoryStr?: string) {
 
   // Add Category Filter
   if (categoryStr && categoryStr !== 'all') {
-    // UPDATED: Use string::startsWith for reliable prefix matching (e.g., 'forklifts' matches 'forklifts_electric')
-    // We also check defined(category) to avoid errors on schemaless documents
-    filters.push(`defined(category) && string::startsWith(category, "${categoryStr}")`)
+    // UPDATED: Check both main category and any sub-category field
+    // This allows "forklift_electric" to match the specific sub-category field
+    filters.push(`(
+      string::startsWith(category, "${categoryStr}") || 
+      sub_category_forklift == "${categoryStr}" ||
+      sub_category_stacker == "${categoryStr}" ||
+      sub_category_pallet_truck == "${categoryStr}" ||
+      sub_category_tyres == "${categoryStr}" ||
+      sub_category_spares == "${categoryStr}"
+    )`)
   }
 
   // Combine filters
@@ -148,6 +160,15 @@ export async function getCategories() {
 
   // 3. Convert to Array and Sort
   return Array.from(productCategories).sort() as string[]
+}
+
+// Fetch Featured Products (Homepage)
+export async function getFeaturedProducts() {
+  const query = `*[_type == "product" && isFeatured == true] | order(featuredRank asc) {
+    ${productCardProjection}
+  }`
+
+  return client.fetch(query, {}, { next: { revalidate: 0 } })
 }
 
 // Fetch Single Product

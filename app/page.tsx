@@ -1,4 +1,4 @@
-import { getProducts } from '@/lib/sanity'
+import { getFeaturedProducts } from '@/lib/sanity'
 import FeaturedProducts from '@/components/FeaturedProducts'
 import Hero from '@/components/Hero'
 import ExploreCategories from '@/components/ExploreCategories'
@@ -31,7 +31,7 @@ export const metadata: Metadata = {
 
 export default async function Home() {
   // 1. Fetch Featured Products
-  const products = await getProducts()
+  const products = await getFeaturedProducts()
 
   return (
     <main className="min-h-screen bg-slate-50 font-sans">

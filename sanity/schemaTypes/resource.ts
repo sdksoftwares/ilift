@@ -17,9 +17,12 @@ export default {
                 list: [
                     { title: 'Forklifts', value: 'forklift' },
                     { title: 'Stackers', value: 'stacker' },
+                    { title: 'Reach Trucks', value: 'reach_truck' },
+                    { title: 'Heavy Duty Forklifts', value: 'heavy_duty_forklift' },
                     { title: 'Pallet Trucks', value: 'pallet_truck' },
-                    { title: 'Video Tutorials', value: 'video' },
-                    { title: 'Manuals', value: 'manual' },
+                    { title: 'Tyres', value: 'parts_tyres' },
+                    { title: 'Spare Parts', value: 'spare_parts' },
+                    { title: 'General / Other', value: 'general' },
                 ],
             },
             validation: (Rule: any) => Rule.required(),
@@ -32,6 +35,8 @@ export default {
                 list: [
                     { title: 'Video', value: 'video' },
                     { title: 'PDF', value: 'pdf' },
+                    { title: 'Manual', value: 'manual' },
+                    { title: 'Guide', value: 'guide' },
                 ],
             },
             validation: (Rule: any) => Rule.required(),
@@ -43,22 +48,9 @@ export default {
             validation: (Rule: any) => Rule.required(),
         },
         {
-            name: 'thumbnail',
-            title: 'Thumbnail',
-            type: 'image',
-            options: {
-                hotspot: true,
-            },
-        },
-        {
-            name: 'duration',
-            title: 'Duration (for Videos) or Size (for PDFs)',
-            type: 'string',
-            description: 'e.g., "5:20" or "2.4 MB"',
-        },
-        {
             name: 'description',
-            title: 'Description',
+            title: 'Resource Description',
+            description: 'Brief details about this file or video.',
             type: 'text',
         },
     ],

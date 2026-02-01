@@ -186,12 +186,27 @@ export default async function ProductPage(props: PageProps) {
               <TabsContent value="specs" className="mt-0 animate-in fade-in-50 duration-300">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-4">
                   {product.specifications ? (
-                    Object.entries(product.specifications).map(([key, value], idx) => (
-                      <div key={key} className="flex items-center justify-between py-4 border-b border-slate-100 group hover:bg-slate-50 px-4 -mx-4 rounded-lg transition-colors">
-                        <span className="font-medium text-slate-500 capitalize">{key.replace(/_/g, ' ')}</span>
-                        <span className="text-slate-900 font-bold">{String(value)}</span>
-                      </div>
-                    ))
+                    <>
+                      {/* Standard Specs */}
+                      {Object.entries(product.specifications)
+                        .filter(([key]) => key !== 'customSpecs')
+                        .map(([key, value]) => (
+                          <div key={key} className="flex items-center justify-between py-4 border-b border-slate-100 group hover:bg-slate-50 px-4 -mx-4 rounded-lg transition-colors">
+                            <span className="font-medium text-slate-500 capitalize">{key.replace(/_/g, ' ')}</span>
+                            <span className="text-slate-900 font-bold">{String(value)}</span>
+                          </div>
+                        ))}
+
+                      {/* Custom Specs */}
+                      {product.specifications.customSpecs && Array.isArray(product.specifications.customSpecs) && (
+                        product.specifications.customSpecs.map((spec: any, idx: number) => (
+                          <div key={`custom-${idx}`} className="flex items-center justify-between py-4 border-b border-slate-100 group hover:bg-slate-50 px-4 -mx-4 rounded-lg transition-colors">
+                            <span className="font-medium text-slate-500 capitalize">{spec.key}</span>
+                            <span className="text-slate-900 font-bold">{spec.value}</span>
+                          </div>
+                        ))
+                      )}
+                    </>
                   ) : (
                     <div className="p-12 text-slate-500 text-center col-span-2">
                       Technical specifications sheet available upon request.

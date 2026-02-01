@@ -23,6 +23,7 @@ interface ProductProps {
       tyre_size?: string
       tyre_type?: string
       compatible_brands?: string
+      customSpecs?: any[]
     }
   }
 }
@@ -119,6 +120,16 @@ export default function ProductCard({ product }: ProductProps) {
               <span className="w-1/2">Components :</span>
               <span className="w-1/2 font-semibold text-red-600">Genuine Parts</span>
             </div>
+          )}
+
+          {/* Custom Specs Fallback */}
+          {(!product.specifications?.load_capacity && !product.specifications?.lift_height && product.specifications?.customSpecs) && (
+            Array.isArray(product.specifications.customSpecs) && product.specifications.customSpecs.slice(0, 2).map((spec: any, idx: number) => (
+              <div key={idx} className="flex text-xs text-slate-500">
+                <span className="w-1/2">{spec.key} :</span>
+                <span className="w-1/2 font-semibold text-red-600 truncate">{spec.value}</span>
+              </div>
+            ))
           )}
         </div>
 
