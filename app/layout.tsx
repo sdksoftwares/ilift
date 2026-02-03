@@ -7,6 +7,7 @@ import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import HelpWidget from '@/components/HelpWidget'
 import SupportFloatingButtons from '@/components/SupportFloatingButtons'
+import LayoutWrapper from '@/components/LayoutWrapper'
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -36,13 +37,22 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Suspense fallback={<div className="h-20 bg-white" />}>
-          <Navbar />
-        </Suspense>
-        {children}
-        <Footer />
-        <HelpWidget />
-        <SupportFloatingButtons />
+        <LayoutWrapper
+          navbar={
+            <Suspense fallback={<div className="h-20 bg-white" />}>
+              <Navbar />
+            </Suspense>
+          }
+          footer={<Footer />}
+          widgets={
+            <>
+              <HelpWidget />
+              <SupportFloatingButtons />
+            </>
+          }
+        >
+          {children}
+        </LayoutWrapper>
       </body>
     </html>
   );
