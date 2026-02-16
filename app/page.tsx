@@ -49,8 +49,8 @@ export default async function Home() {
       <section className="bg-white py-24 border-y border-slate-100">
         <div className="max-w-[1440px] mx-auto px-4 lg:px-6">
           <div className="text-center mb-16 max-w-3xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-black text-slate-900 mb-4 tracking-tight">Why Industry Leaders Choose iLift</h2>
-            <p className="text-slate-500 text-lg">We deliver more than just machinery. We provide the reliability and support that powers your supply chain.</p>
+            <h2 className="text-3xl md:text-4xl font-black text-slate-900 mb-4 tracking-tight">Why Industry Leaders Choose i-Lift</h2>
+            <p className="text-slate-500 text-lg">We deliver more than just machinery. We provide the reliability and support that powers your productivity.</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -77,8 +77,8 @@ export default async function Home() {
               <div className="w-14 h-14 bg-white rounded-xl flex items-center justify-center mb-6 shadow-sm border border-slate-100 group-hover:scale-110 transition-transform duration-300">
                 <Layers className="h-7 w-7 text-slate-600 group-hover:text-red-600 transition-colors" />
               </div>
-              <h3 className="text-xl font-bold text-slate-900 mb-3">Multi-Brand Supply</h3>
-              <p className="text-slate-500 leading-relaxed">Your one-stop solution for parts across all major brands including Toyota, Godrej, Voltas, and Maini. Simplify your procurement process.</p>
+              <h3 className="text-xl font-bold text-slate-900 mb-3">Our Ecosystem</h3>
+              <p className="text-slate-500 leading-relaxed">Experience full-scale visibility with our Fleet Management System, designed to sync your entire supply chain into one seamless dashboard.</p>
             </div>
 
             {/* Feature 4 */}
@@ -116,7 +116,7 @@ export default async function Home() {
       <section className="bg-slate-900 text-white py-20">
         <div className="max-w-[1440px] mx-auto px-4 lg:px-6">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold mb-4">How to Order</h2>
+            <h2 className="text-3xl font-bold mb-4">How to get Quote</h2>
             <p className="text-slate-400">Simple 4-step process to get your machinery.</p>
           </div>
 
@@ -161,8 +161,8 @@ export default async function Home() {
 
               <div className="space-y-6">
                 {[
-                  { title: "Nationwide Service Network", desc: "Certified engineers available across all major industrial hubs.", icon: MapPin },
-                  { title: "Comprehensive AMCs", desc: "Preventive maintenance plans tailored to your fleet's needs.", icon: ShieldCheck },
+                  { title: "Total Care Support", desc: "Full-time certified engineers available 24/7 for Online 360° service support.", icon: MapPin },
+                  { title: "Operational Continuity Support", desc: "Continuous operational support with Maintenance Schedules and Fleet Management System.", icon: ShieldCheck },
                   { title: "Genuine Parts Guarantee", desc: "100% original spares directly from OEMs for maximum longevity.", icon: CheckCircle2 },
                 ].map((item, i) => (
                   <div key={i} className="flex gap-4 group">
@@ -198,7 +198,7 @@ export default async function Home() {
                 <Phone className="h-12 w-12 text-red-500 mb-6" />
 
                 <h3 className="text-2xl font-bold mb-2">Need Immediate Assistance?</h3>
-                <p className="text-slate-400 mb-8">Our technical support team is available Mon-Sat, 9am - 7pm IST.</p>
+                <p className="text-slate-400 mb-8">Our Technical and Commercial team is available 24/7.</p>
 
                 <div className="flex flex-col gap-4">
                   <a href="tel:+919876543210" className="flex items-center justify-between p-4 rounded-xl bg-white/10 hover:bg-white/20 border border-white/5 transition-all group">
@@ -251,7 +251,7 @@ export default async function Home() {
               </h2>
               <p className="text-xl text-slate-400 leading-relaxed">
                 Get a competitive quote for premium machinery and spare parts today.
-                Experience the iLift difference.
+                Experience the i-Lift difference.
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
@@ -268,7 +268,7 @@ export default async function Home() {
               </div>
 
               <p className="text-sm text-slate-500 pt-6">
-                No credit card required for quotes • Response within 24 hours
+                • Response within 24 hours
               </p>
             </div>
           </div>
