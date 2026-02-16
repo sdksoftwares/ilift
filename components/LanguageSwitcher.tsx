@@ -1,10 +1,9 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { Globe } from 'lucide-react'
 
 export default function LanguageSwitcher() {
-  const [isReady, setIsReady] = useState(false)
 
   useEffect(() => {
     // 1. Check if script is already present to prevent duplicates
@@ -13,23 +12,22 @@ export default function LanguageSwitcher() {
     }
 
     // 2. Define the callback function globally BEFORE loading script
-    // @ts-expect-error
+    // @ts-expect-error Google Translate API
     window.googleTranslateElementInit = () => {
-      // @ts-expect-error
+      // @ts-expect-error Google Translate API
       if (window.google && window.google.translate) {
-        // @ts-expect-error
+        // @ts-expect-error Google Translate API
         new window.google.translate.TranslateElement(
           {
             pageLanguage: 'en',
             // Limit to South African languages + Major International Trade languages
             includedLanguages: 'en,af,zu,xh,fr,pt,es,de,zh-CN,hi,ar,ru,ja',
-            // @ts-expect-error
+            // @ts-expect-error Google Translate API
             layout: window.google.translate.TranslateElement.InlineLayout.SIMPLE,
             autoDisplay: false,
           },
           'google_translate_element'
         )
-        setIsReady(true)
       }
     }
 
@@ -46,7 +44,7 @@ export default function LanguageSwitcher() {
   }, [])
 
   return (
-    <div className="relative group min-w-[100px]">
+    <div className="relative group min-w-[100px] overflow-hidden">
       {/* 
         1. VISUAL LAYER: What the user sees 
         This is always visible and consistent.
@@ -63,8 +61,8 @@ export default function LanguageSwitcher() {
       */}
       <div
         id="google_translate_element"
-        className="absolute inset-0 opacity-0 overflow-hidden z-50 cursor-pointer"
-        style={{ transform: 'scale(1.5)', transformOrigin: 'top left' }}
+        className="absolute inset-0 opacity-0 z-50 cursor-pointer"
+        style={{ transform: 'scale(1.2)', transformOrigin: 'center' }}
       />
 
       {/* 

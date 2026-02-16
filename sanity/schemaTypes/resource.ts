@@ -1,15 +1,17 @@
-export default {
+import { defineField, defineType } from 'sanity'
+
+export default defineType({
     name: 'resource',
     title: 'Resource',
     type: 'document',
     fields: [
-        {
+        defineField({
             name: 'title',
             title: 'Title',
             type: 'string',
-            validation: (Rule: any) => Rule.required(),
-        },
-        {
+            validation: (Rule) => Rule.required(),
+        }),
+        defineField({
             name: 'category',
             title: 'Category',
             type: 'string',
@@ -25,9 +27,9 @@ export default {
                     { title: 'General / Other', value: 'general' },
                 ],
             },
-            validation: (Rule: any) => Rule.required(),
-        },
-        {
+            validation: (Rule) => Rule.required(),
+        }),
+        defineField({
             name: 'type',
             title: 'Type',
             type: 'string',
@@ -39,19 +41,19 @@ export default {
                     { title: 'Guide', value: 'guide' },
                 ],
             },
-            validation: (Rule: any) => Rule.required(),
-        },
-        {
+            validation: (Rule) => Rule.required(),
+        }),
+        defineField({
             name: 'url',
             title: 'External URL (YouTube / PDF Link)',
             type: 'url',
-            validation: (Rule: any) => Rule.required(),
-        },
-        {
+            validation: (Rule) => Rule.required(),
+        }),
+        defineField({
             name: 'description',
             title: 'Resource Description',
             description: 'Brief details about this file or video.',
             type: 'text',
-        },
+        }),
     ],
-}
+})

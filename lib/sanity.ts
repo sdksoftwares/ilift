@@ -1,6 +1,7 @@
 // lib/sanity.ts
 import { createClient } from 'next-sanity'
 import imageUrlBuilder from '@sanity/image-url'
+import { SanityImageSource } from '@sanity/image-url/lib/types/types'
 import { PRODUCTS_MENU, SPARE_PARTS_MENU } from '@/lib/constants'
 
 // 1. Configuration
@@ -14,7 +15,7 @@ export const client = createClient({
 // 2. Image Builder
 const builder = imageUrlBuilder(client)
 
-export function urlFor(source: any) {
+export function urlFor(source: SanityImageSource) {
   return builder.image(source)
 }
 
@@ -124,7 +125,7 @@ export async function getCategories() {
   const products = await client.fetch(query, {}, { next: { revalidate: 0 } })
 
   // 1. Get categories from actual products
-  const productCategories = new Set(products.map((p: any) => p.category).filter(Boolean))
+  const productCategories = new Set(products.map((p: { category: string }) => p.category).filter(Boolean))
 
   // 2. Add Standard Categories (Dynamically generated from Constants)
   const standardCategories = new Set<string>()
@@ -146,9 +147,8 @@ export async function getCategories() {
   // Iterate SPARE_PARTS_MENU
   SPARE_PARTS_MENU.forEach(item => {
     extractCategory(item.href)
-    // @ts-ignore - Check for subcategories if they exist on the union type
+    // Check for subcategories if they exist on the union type
     if (item.subcategories) {
-      // @ts-ignore
       item.subcategories.forEach(sub => extractCategory(sub.href))
     }
   })

@@ -3,8 +3,7 @@ import ProductCard from '@/components/ProductCard'
 import SearchFilter from '@/components/SearchFilter'
 import ProductSidebar from '@/components/ProductSidebar'
 import ProductHero from '@/components/ProductHero'
-import { PackageOpen, ArrowLeft } from 'lucide-react'
-import Link from 'next/link'
+import { PackageOpen } from 'lucide-react'
 
 // Revalidate data every hour
 // Revalidate data every hour
@@ -18,6 +17,25 @@ export const metadata = {
     title: 'Industrial Equipment Catalog | iLift',
     description: 'Complete inventory of certified lifting machinery and spare parts.',
     type: 'website',
+  }
+}
+
+interface Product {
+  _id: string
+  name: string | { en: string }
+  slug: string
+  imageUrl: string
+  category: string
+  price?: number
+  specifications?: {
+    load_capacity?: number
+    power_type?: string
+    lift_height?: string
+    tyre_size?: string
+    tyre_type?: string
+    compatible_brands?: string
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    customSpecs?: any[]
   }
 }
 
@@ -112,7 +130,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
             <div className="p-6 lg:p-10">
               {products.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
-                  {products.map((product: any) => (
+                  {products.map((product: Product) => (
                     <ProductCard key={product._id} product={product} />
                   ))}
                 </div>

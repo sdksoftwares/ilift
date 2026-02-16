@@ -6,22 +6,23 @@ import ProductFeatures from '@/components/ProductFeatures'
 import RecommendedProducts from '@/components/RecommendedProducts'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import Image from 'next/image'
 import {
-  CheckCircle2, Truck, ArrowRight, FileText
+  CheckCircle2, Truck, ArrowRight
 } from 'lucide-react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { PortableText } from 'next-sanity'
+import { PortableTextBlock } from 'sanity'
 import DownloadSpecButton from '@/components/DownloadSpecButton'
 
-function toPlainText(blocks: any[] = []) {
+function toPlainText(blocks: PortableTextBlock[] = []) {
   if (!blocks || !Array.isArray(blocks)) return ''
   return blocks
     .map(block => {
       if (block._type !== 'block' || !block.children) {
         return ''
       }
-      return block.children.map((child: any) => child.text).join('')
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      return (block.children as any[]).map((child: { text: string }) => child.text).join('')
     })
     .join('\n\n')
 }
@@ -199,7 +200,7 @@ export default async function ProductPage(props: PageProps) {
 
                       {/* Custom Specs */}
                       {product.specifications.customSpecs && Array.isArray(product.specifications.customSpecs) && (
-                        product.specifications.customSpecs.map((spec: any, idx: number) => (
+                        product.specifications.customSpecs.map((spec: { key: string; value: string }, idx: number) => (
                           <div key={`custom-${idx}`} className="flex items-center justify-between py-4 border-b border-slate-100 group hover:bg-slate-50 px-4 -mx-4 rounded-lg transition-colors">
                             <span className="font-medium text-slate-500 capitalize">{spec.key}</span>
                             <span className="text-slate-900 font-bold">{spec.value}</span>

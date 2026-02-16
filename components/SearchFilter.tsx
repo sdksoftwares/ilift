@@ -28,11 +28,13 @@ export default function SearchFilter({ categories, hideCategoryDropdown }: Searc
   const [category, setCategory] = useState(searchParams.get("category") || "all");
 
   // 2. SYNC FROM URL (Downstream)
+  // Sync with URL (safely)
   useEffect(() => {
     const urlQuery = searchParams.get("query") || "";
     const urlCategory = searchParams.get("category") || "all";
-    setSearch((prev) => (prev !== urlQuery ? urlQuery : prev));
-    setCategory((prev) => (prev !== urlCategory ? urlCategory : prev));
+    if (search !== urlQuery) setSearch(urlQuery);
+    if (category !== urlCategory) setCategory(urlCategory);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
 
   // 3. SYNC TO URL (Upstream)

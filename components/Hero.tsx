@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import Image from 'next/image'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence, PanInfo } from 'framer-motion'
 import { ChevronLeft, ChevronRight, Download, BookOpen } from 'lucide-react'
 
 // --- SLIDE DATA ---
@@ -83,7 +83,7 @@ export default function Hero() {
   }, [])
 
   // --- SWIPE LOGIC ---
-  const onDragEnd = (event: any, info: any) => {
+  const onDragEnd = (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
     if (info.offset.x > 100) {
       prevSlide()
     } else if (info.offset.x < -100) {

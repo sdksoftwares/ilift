@@ -18,7 +18,7 @@ export default function NotFound() {
             </h1>
 
             <p className="text-lg text-slate-500 max-w-md mb-8">
-                We couldn't locate the machinery or page you were looking for. It might have been moved or doesn't exist.
+                We couldn&apos;t locate the machinery or page you were looking for. It might have been moved or doesn&apos;t exist.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4">

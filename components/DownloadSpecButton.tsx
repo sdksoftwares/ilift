@@ -5,7 +5,7 @@ import { FileDown } from 'lucide-react'
 interface DownloadSpecButtonProps {
     productName: string
     description: string
-    specifications: Record<string, any>
+    specifications: Record<string, unknown>
     logistics?: {
         lead_time?: string
         shipping_details?: string
@@ -45,7 +45,7 @@ export default function DownloadSpecButton({
             Object.entries(specifications).forEach(([key, value]) => {
                 if (key === 'customSpecs' && Array.isArray(value)) {
                     // Handle Custom Specs Array
-                    value.forEach((item: any) => {
+                    value.forEach((item: { key: string; value: string }) => {
                         if (item.key && item.value) {
                             content += `${item.key.toUpperCase()}: ${item.value}\n`
                         }

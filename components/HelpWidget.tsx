@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { HelpCircle, X, ExternalLink, ChevronRight, FileText, ShoppingCart, Truck } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -16,6 +16,13 @@ const HELP_LINKS = [
 
 export default function HelpWidget() {
     const [isOpen, setIsOpen] = useState(false)
+
+    // Listen for custom "open-chat" event from Navbar
+    useEffect(() => {
+        const handleOpenChat = () => setIsOpen(true)
+        window.addEventListener('open-chat', handleOpenChat)
+        return () => window.removeEventListener('open-chat', handleOpenChat)
+    }, [])
 
     return (
         <div className="fixed bottom-6 right-6 z-40 flex flex-row items-end gap-4 pointer-events-none">

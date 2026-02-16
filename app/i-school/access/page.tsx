@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Search, FileText, Play, Filter, X, Download, ExternalLink, ChevronDown, BookOpen } from 'lucide-react'
+import { SanityImageSource } from '@sanity/image-url/lib/types/types'
+import { Search, FileText, Play, X, Download, ExternalLink, ChevronDown, BookOpen } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -30,7 +31,7 @@ interface Resource {
     type: 'video' | 'pdf';
     category: string;
     url: string;
-    thumbnail?: any;
+    thumbnail?: SanityImageSource;
     duration?: string;
     description?: string;
 }

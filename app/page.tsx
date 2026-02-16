@@ -7,7 +7,7 @@ import CartDrawer from '@/components/CartDrawer'
 import Link from 'next/link'
 import {
   ArrowRight, ShieldCheck, Clock, Layers, Factory, Wrench, Globe,
-  Search, ShoppingCart, Send, Phone, CheckCircle2, Package, Truck, Zap,
+  Search, ShoppingCart, Send, Phone, CheckCircle2,
   MapPin, Mail
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -129,7 +129,7 @@ export default async function Home() {
               { title: "Add to Quote", desc: "Select items you need", icon: ShoppingCart },
               { title: "Submit", desc: "Send your requirements", icon: Send },
               { title: "We Contact", desc: "Get best price & availability", icon: Phone },
-            ].map((step, idx) => (
+            ].map((step) => (
               <div key={step.title} className="relative z-10 flex flex-col items-center text-center">
                 <div className="h-16 w-16 bg-slate-800 border-4 border-slate-900 rounded-full flex items-center justify-center mb-6">
                   <step.icon className="h-6 w-6 text-red-500" />

@@ -1,7 +1,6 @@
 'use client'
 
-import { motion } from 'framer-motion'
-import { FileText, Play, Wrench, BookOpen, CheckCircle, ArrowRight, Zap } from 'lucide-react'
+import { Play, ArrowRight, Zap } from 'lucide-react'
 import Link from 'next/link'
 import NextImage from 'next/image'
 import { Button } from '@/components/ui/button'

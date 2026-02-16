@@ -4,10 +4,10 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
-import { Card, CardContent } from '@/components/ui/card'
+
 import {
-    MapPin, Phone, Clock, Send, Loader2, Building2,
-    Mail, MessageSquare, ChevronDown
+    MapPin, Phone, Clock, Send, Loader2,
+    MessageSquare, ChevronDown
 } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 
@@ -50,7 +50,7 @@ export default function ContactForm() {
 
                 <div className="max-w-7xl mx-auto px-6 relative z-10 text-center">
                     <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-800/50 border border-slate-700 text-slate-300 text-xs font-bold uppercase tracking-wide mb-6 backdrop-blur-sm">
-                        <MessageSquare className="h-3.5 w-3.5 text-red-500" /> We're Here to Help
+                        <MessageSquare className="h-3.5 w-3.5 text-red-500" /> We&apos;re Here to Help
                     </div>
                     <h1 className="text-4xl md:text-5xl font-black text-white mb-6 tracking-tight">
                         Get in Touch
@@ -116,7 +116,7 @@ export default function ContactForm() {
                     {/* LEFT: Contact Form */}
                     <div>
                         <div className="mb-10">
-                            <h2 className="text-3xl font-bold text-slate-900">Send us a Message</h2>
+                            <h2 className="text-3xl font-bold mb-6 text-slate-800">Let&apos;s Start a Conversation</h2>
                             <p className="text-slate-500 mt-3 text-lg">
                                 Fill out the form below and our team will get back to you within 24 hours.
                             </p>

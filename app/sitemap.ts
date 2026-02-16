@@ -32,7 +32,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
   `)
 
-    const productRoutes = products.map((product: any) => ({
+    const productRoutes = products.map((product: { slug: string; _updatedAt: string }) => ({
         url: `${baseUrl}/products/${product.slug}`,
         lastModified: new Date(product._updatedAt),
         changeFrequency: 'weekly' as const,

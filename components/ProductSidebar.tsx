@@ -1,9 +1,8 @@
 'use client'
 
-import { useState, useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { PRODUCTS_MENU, SPARE_PARTS_MENU } from '@/lib/constants'
-import { Square, CheckSquare, X } from 'lucide-react'
+import { CheckSquare } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
 export default function ProductSidebar() {

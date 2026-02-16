@@ -1,24 +1,19 @@
 'use client'
 
 import Link from 'next/link'
-import { useState } from 'react'
 import {
-  Facebook, Linkedin, Twitter, Mail, Phone, MapPin,
-  ArrowRight, ChevronDown, Download, ShieldCheck, Youtube, Instagram
+  Facebook, Mail, Phone,
+  ArrowRight, ShieldCheck, Youtube, Instagram
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { AnimatePresence, motion } from 'framer-motion'
+// Removed unused Framer Motion imports
 
 export default function Footer() {
   const currentYear = new Date().getFullYear()
 
   // Mobile Accordion State
-  const [openSection, setOpenSection] = useState<string | null>(null)
-
-  const toggleSection = (section: string) => {
-    setOpenSection(openSection === section ? null : section)
-  }
+  // Mobile Accordion State (removed unused)
 
   return (
     <footer className="bg-slate-950 text-slate-400 font-sans relative overflow-hidden">

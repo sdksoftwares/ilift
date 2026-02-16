@@ -5,9 +5,7 @@ import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 import FeaturedProductCard from '@/components/FeaturedProductCard'
 
-interface FeaturedProductsProps {
-    products: any[]
-}
+
 
 const TABS = [
     { id: 'all', label: 'All Equipment' },
@@ -17,7 +15,19 @@ const TABS = [
     { id: 'solid_tyre', label: 'Solid Tyres' },
 ]
 
-export default function FeaturedProducts({ products }: FeaturedProductsProps) {
+interface Product {
+    _id: string
+    name: string | { en: string }
+    slug: string | { current: string }
+    imageUrl?: string // or generic
+    images?: string[] // sanity response
+    category?: string
+    price?: number
+    specifications?: Record<string, unknown> // simplify for now or import
+    [key: string]: unknown
+}
+
+export default function FeaturedProducts({ products }: { products: Product[] }) {
     const [activeTab, setActiveTab] = useState('all')
 
     // Filter Logic
@@ -66,7 +76,7 @@ export default function FeaturedProducts({ products }: FeaturedProductsProps) {
                 {/* Product Grid */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
                     {filteredProducts.length > 0 ? (
-                        filteredProducts.slice(0, 8).map((product: any) => (
+                        filteredProducts.slice(0, 8).map((product: Product) => (
                             <FeaturedProductCard key={product._id} product={product} />
                         ))
                     ) : (

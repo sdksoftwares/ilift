@@ -9,7 +9,6 @@ import {
   Menu, X, Search, ChevronDown,
   HelpCircle
 } from 'lucide-react'
-import { useCartStore } from '@/lib/store'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import {
@@ -256,7 +255,7 @@ export default function Navbar() {
 
                   {'subcategories' in activeSparePartCategory && activeSparePartCategory.subcategories ? (
                     <div className="space-y-3">
-                      {activeSparePartCategory.subcategories.map((sub: any) => (
+                      {activeSparePartCategory.subcategories.map((sub: { name: string; href: string }) => (
                         <Link
                           key={sub.name}
                           href={sub.href}
@@ -452,7 +451,7 @@ export default function Navbar() {
                           </Link>
                           {'subcategories' in item && item.subcategories && (
                             <div className="pl-3 space-y-1 border-l-2 border-slate-200 ml-3">
-                              {item.subcategories.map((sub: any) => (
+                              {item.subcategories.map((sub: { name: string; href: string }) => (
                                 <Link
                                   key={sub.name}
                                   href={sub.href}
@@ -488,7 +487,7 @@ export default function Navbar() {
                           </Link>
                           {'subcategories' in item && item.subcategories && (
                             <div className="pl-3 space-y-1 border-l-2 border-slate-200 ml-3">
-                              {item.subcategories.map((sub: any) => (
+                              {item.subcategories.map((sub: { name: string; href: string }) => (
                                 <Link
                                   key={sub.name}
                                   href={sub.href}

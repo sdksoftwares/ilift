@@ -2,10 +2,21 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
-import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
+
+interface Product {
+    _id: string
+    name: string
+    slug: string
+    imageUrl?: string
+    specifications?: {
+        load_capacity?: string
+        power_type?: string
+    }
+}
 
 interface RecommendedProductsProps {
-    products: any[]
+    products: Product[]
 }
 
 export default function RecommendedProducts({ products }: RecommendedProductsProps) {
@@ -48,7 +59,7 @@ export default function RecommendedProducts({ products }: RecommendedProductsPro
                     {/* RIGHT GRID (Products) - Always Grid */}
                     <div className="bg-slate-50 border-l border-slate-100 h-full">
                         <div className={`grid grid-cols-1 md:grid-cols-2 ${displayProducts.length > 2 ? 'lg:grid-cols-3' : ''} h-full divide-y md:divide-y-0 md:divide-x divide-slate-200`}>
-                            {displayProducts.map((sim: any) => (
+                            {displayProducts.map((sim: Product) => (
                                 <Link key={sim._id} href={`/products/${sim.slug}`} className="group bg-white h-full flex flex-col items-center text-center p-8 lg:p-12 hover:z-10 hover:shadow-[0_20px_50px_rgba(0,0,0,0.1)] hover:relative transition-all duration-300">
 
                                     {/* Image Area - Fixed Height for alignment */}

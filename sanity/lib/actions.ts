@@ -1,6 +1,6 @@
-import { DocumentActionComponent, DocumentActionsContext } from 'sanity'
+import { DocumentActionComponent } from 'sanity'
 
-export function resolveDocumentActions(prev: DocumentActionComponent[], context: DocumentActionsContext) {
+export function resolveDocumentActions(prev: DocumentActionComponent[]) {
     // 1. Identify key actions
     const publishAction = prev.find((action) => action.action === 'publish')
     const deleteAction = prev.find((action) => action.action === 'delete')
@@ -27,8 +27,8 @@ export function resolveDocumentActions(prev: DocumentActionComponent[], context:
                 // Determine URL based on type
                 // This is a basic implementation; exact paths might need adjustment
                 let href = '/'
-                if (doc._type === 'product' && doc.slug && (doc.slug as any).current) {
-                    href = `/products/${(doc.slug as any).current}`
+                if (doc._type === 'product' && doc.slug && (doc.slug as { current: string }).current) {
+                    href = `/products/${(doc.slug as { current: string }).current}`
                 } else if (doc._type === 'resource') {
                     // Resources might not have a dedicated page, but we can point to a list or similar
                     href = '/i-school'

@@ -7,11 +7,30 @@ import DownloadSpecButton from '@/components/DownloadSpecButton'
 import { Badge } from '@/components/ui/badge'
 import { Scale, ArrowUp, Zap, Circle } from 'lucide-react'
 
+interface Product {
+    _id: string
+    slug: string | { current: string }
+    name: string | { en: string }
+    images?: string[]
+    imageUrl?: string
+    specifications?: Record<string, unknown>
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    description?: any[]
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    logistics?: any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    support?: any
+    category?: string
+    price?: number
+    [key: string]: unknown
+}
+
 interface ProductDetailHeroProps {
-    product: any
+    product: Product
 }
 
 // Helper function to convert portable text to plain text
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function toPlainText(blocks: any[] = []) {
     if (!blocks || !Array.isArray(blocks)) return ''
     return blocks
@@ -19,13 +38,14 @@ function toPlainText(blocks: any[] = []) {
             if (block._type !== 'block' || !block.children) {
                 return ''
             }
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             return block.children.map((child: any) => child.text).join('')
         })
         .join('\n\n')
 }
 
 export default function ProductDetailHero({ product }: ProductDetailHeroProps) {
-    const productName = product.name?.en || product.name || "Unknown Product"
+    const productName = typeof product.name === 'object' ? product.name.en : (product.name || "Unknown Product")
     // Safe Access to specs
     const specs = product.specifications || {}
 
@@ -117,7 +137,7 @@ export default function ProductDetailHero({ product }: ProductDetailHeroProps) {
                             <Scale className="w-7 h-7 text-blue-600 mx-auto mb-3" />
                             <p className="text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Rated Capacity</p>
                             <p className="text-3xl md:text-4xl font-black text-slate-900">
-                                {specs.load_capacity ? <>{specs.load_capacity}<span className="text-base font-medium text-slate-600 ml-1">kg</span></> : '-'}
+                                {specs.load_capacity ? <>{String(specs.load_capacity)}<span className="text-base font-medium text-slate-600 ml-1">kg</span></> : '-'}
                             </p>
                         </div>
 
@@ -126,7 +146,7 @@ export default function ProductDetailHero({ product }: ProductDetailHeroProps) {
                             <ArrowUp className="w-7 h-7 text-green-600 mx-auto mb-3" />
                             <p className="text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Max Height</p>
                             <p className="text-3xl md:text-4xl font-black text-slate-900">
-                                {specs.lift_height ? <>{specs.lift_height}<span className="text-base font-medium text-slate-600 ml-1">mm</span></> : '-'}
+                                {specs.lift_height ? <>{String(specs.lift_height)}<span className="text-base font-medium text-slate-600 ml-1">mm</span></> : '-'}
                             </p>
                         </div>
 
@@ -135,7 +155,7 @@ export default function ProductDetailHero({ product }: ProductDetailHeroProps) {
                             <Zap className="w-7 h-7 text-amber-600 mx-auto mb-3" />
                             <p className="text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Power Source</p>
                             <p className="text-2xl md:text-3xl font-bold text-slate-900 truncate">
-                                {specs.power_type || (product.category?.includes('electric') ? 'Electric' : 'Manual')}
+                                {String(specs.power_type || (product.category?.includes('electric') ? 'Electric' : 'Manual'))}
                             </p>
                         </div>
 
@@ -144,7 +164,7 @@ export default function ProductDetailHero({ product }: ProductDetailHeroProps) {
                             <Circle className="w-7 h-7 text-purple-600 mx-auto mb-3" />
                             <p className="text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Tyre Type</p>
                             <p className="text-xl md:text-2xl font-bold text-slate-900 truncate">
-                                {specs.tyre_type || 'Industrial'}
+                                {String(specs.tyre_type || 'Industrial')}
                             </p>
                         </div>
 

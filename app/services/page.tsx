@@ -1,8 +1,8 @@
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import {
-  Wrench, Truck, Search, ClipboardCheck, ArrowRight,
-  ShieldCheck, Clock, Settings, Phone, CheckCircle2
+  Wrench, Search, ClipboardCheck, ArrowRight,
+  ShieldCheck, Settings, Phone, CheckCircle2
 } from 'lucide-react'
 
 export const metadata = {
@@ -169,7 +169,7 @@ export default function ServicesIndexPage() {
           </div>
           <h2 className="text-4xl font-bold text-slate-900 mb-6">Running into technical issues?</h2>
           <p className="text-xl text-slate-500 mb-10 leading-relaxed">
-            Don't let equipment failure halt your production. Our team is ready to deploy
+            Don&apos;t let equipment failure halt your production. Our team is ready to deploy
             for on-site inspections and emergency repairs.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">

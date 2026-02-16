@@ -1,5 +1,4 @@
 import Link from 'next/link'
-import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import {
   CheckCircle2, TrendingUp, Users, Target,
@@ -108,7 +107,7 @@ export default function AboutPage() {
               </p>
               <p>
                 <span className="text-slate-900 font-semibold">We changed that.</span> By digitizing the catalog
-                and building a robust nationwide support network, we've made buying a forklift as simple
+                and building a robust nationwide support network, we&apos;ve made buying a forklift as simple
                 as buying office supplies—but with the technical backing required for heavy industry.
               </p>
             </div>
@@ -117,7 +116,7 @@ export default function AboutPage() {
               <div>
                 <Target className="h-8 w-8 text-red-600 mb-3" />
                 <h4 className="font-bold text-slate-900">Our Vision</h4>
-                <p className="text-sm text-slate-500 mt-1">To be Asia's most trusted industrial equipment partner.</p>
+                <p className="text-sm text-slate-500 mt-1">To be Asia&apos;s most trusted industrial equipment partner.</p>
               </div>
               <div>
                 <Award className="h-8 w-8 text-amber-500 mb-3" />

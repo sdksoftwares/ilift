@@ -180,7 +180,7 @@ export default defineType({
           name: 'battery_voltage',
           title: 'Battery Voltage (V)',
           type: 'string',
-          hidden: ({ document }) => !['forklift', 'stacker', 'reach_truck', 'heavy_duty_forklift', 'pallet_truck', 'other'].includes(document?.category as string || '') || (document?.specifications as any)?.power_type === 'Manual'
+          hidden: ({ document }) => !['forklift', 'stacker', 'reach_truck', 'heavy_duty_forklift', 'pallet_truck', 'other'].includes(document?.category as string || '') || ((document?.specifications as { power_type?: string })?.power_type === 'Manual')
         },
 
         // Tyre Specs

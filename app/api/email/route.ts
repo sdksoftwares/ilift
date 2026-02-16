@@ -2,13 +2,28 @@ import { Resend } from 'resend';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
+interface User {
+  name: string
+  company?: string
+  email: string
+  phone: string
+  message?: string
+}
+
+interface Item {
+  imageUrl: string
+  name: string
+  category: string
+  slug: string
+}
+
 export async function POST(req: Request) {
   try {
-    const { user, items } = await req.json();
+    const { user, items }: { user: User; items: Item[] } = await req.json();
 
     // 1. Generate HTML Table Rows for Products
     // We use the imageUrl we stored in the cart to show thumbnails in the email
-    const productRows = items.map((i: any) => `
+    const productRows = items.map((i) => `
       <tr>
         <td style="padding: 12px; border-bottom: 1px solid #e2e8f0;">
           <img src="${i.imageUrl}" alt="${i.name}" width="60" height="60" style="object-fit: cover; border-radius: 6px; border: 1px solid #e2e8f0;" />

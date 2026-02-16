@@ -4,9 +4,8 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
-import { MessageSquare, CheckSquare, BarChart2 } from 'lucide-react'
+import { MessageSquare } from 'lucide-react'
 import { useCartStore } from '@/lib/store'
-import { useState, useEffect } from 'react'
 
 interface ProductProps {
   product: {
@@ -23,7 +22,7 @@ interface ProductProps {
       tyre_size?: string
       tyre_type?: string
       compatible_brands?: string
-      customSpecs?: any[]
+      customSpecs?: { key: string; value: string }[]
     }
   }
 }
@@ -124,7 +123,7 @@ export default function ProductCard({ product }: ProductProps) {
 
           {/* Custom Specs Fallback */}
           {(!product.specifications?.load_capacity && !product.specifications?.lift_height && product.specifications?.customSpecs) && (
-            Array.isArray(product.specifications.customSpecs) && product.specifications.customSpecs.slice(0, 2).map((spec: any, idx: number) => (
+            Array.isArray(product.specifications.customSpecs) && product.specifications.customSpecs.slice(0, 2).map((spec: { key: string; value: string }, idx: number) => (
               <div key={idx} className="flex text-xs text-slate-500">
                 <span className="w-1/2">{spec.key} :</span>
                 <span className="w-1/2 font-semibold text-red-600 truncate">{spec.value}</span>

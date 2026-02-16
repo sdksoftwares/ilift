@@ -3,41 +3,38 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { ArrowRight, Info, Plus, ShoppingCart, Eye } from 'lucide-react'
+import { Plus, Eye } from 'lucide-react'
 import { useCartStore } from '@/lib/store'
-import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 
 interface ProductProps {
   product: {
     _id: string
     name: string | { en: string }
-    slug: string
-    imageUrl: string
-    category: string
+    slug: string | { current: string }
+    imageUrl?: string // or generic
+    category?: string
     price?: number
     specifications?: {
       load_capacity?: number
       power_type?: string
       tyre_size?: string
       tyre_type?: string
-      compatible_brands?: string
-      customSpecs?: any[]
+      compatible_brands?: string[]
+      customSpecs?: { key: string; value: string }[]
     }
   }
 }
 
 export default function FeaturedProductCard({ product }: ProductProps) {
   const { addItem, items, toggleCart } = useCartStore()
-  const [isAdded, setIsAdded] = useState(false)
+
+  // Derived state directly from store
+  const isAdded = items.some((item) => item._id === product._id)
 
   // Handle Name (Safety check for object vs string)
   const productName = typeof product.name === 'object' ? product.name.en : product.name
-
-  // Sync with Cart Store
-  useEffect(() => {
-    setIsAdded(items.some((item) => item._id === product._id))
-  }, [items, product._id])
+  const productSlug = typeof product.slug === 'object' ? product.slug.current : product.slug
 
   const handleAdd = (e: React.MouseEvent) => {
     e.preventDefault() // Prevent link navigation
@@ -48,9 +45,9 @@ export default function FeaturedProductCard({ product }: ProductProps) {
     addItem({
       _id: product._id,
       name: productName,
-      slug: product.slug,
-      imageUrl: product.imageUrl,
-      category: product.category,
+      slug: productSlug,
+      imageUrl: product.imageUrl || '',
+      category: product.category || 'General',
       price: product.price
     })
   }
@@ -148,7 +145,7 @@ export default function FeaturedProductCard({ product }: ProductProps) {
 
               {/* Fallback to Custom Specs if standard specs are missing */}
               {(!product.specifications?.load_capacity && !product.specifications?.tyre_size && !product.specifications?.compatible_brands && product.specifications?.customSpecs) && (
-                Array.isArray(product.specifications.customSpecs) && product.specifications.customSpecs.slice(0, 2).map((spec: any, idx: number) => (
+                Array.isArray(product.specifications.customSpecs) && product.specifications.customSpecs.slice(0, 2).map((spec: { key: string; value: string }, idx: number) => (
                   <span key={idx} className="flex items-center text-slate-500">
                     <span className="font-semibold text-slate-700 mr-1">{spec.key}:</span> {spec.value}
                   </span>

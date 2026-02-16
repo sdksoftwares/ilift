@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import { motion } from 'framer-motion'
-import { ShieldCheck, Globe, Truck, CheckCircle } from 'lucide-react'
+import { ShieldCheck, Globe, Truck } from 'lucide-react'
 
 export default function ProductHero() {
     return (

@@ -1,13 +1,23 @@
+
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import {
-  Wrench, Truck, Search, ClipboardCheck,
-  CheckCircle2, ArrowRight, Phone
+  Wrench, Search, ClipboardCheck,
+  CheckCircle2, Phone, Truck, LucideIcon
 } from 'lucide-react'
 
 // --- SERVICE DATA KNOWLEDGE BASE ---
-const SERVICES_DATA: Record<string, any> = {
+interface ServiceData {
+  title: string
+  subtitle: string
+  icon: LucideIcon
+  description: string
+  features: string[]
+  ctaText: string
+}
+
+const SERVICES_DATA: Record<string, ServiceData> = {
   "installation": {
     title: "Professional Installation Support",
     subtitle: "Expert setup and commissioning for heavy machinery.",
@@ -141,7 +151,7 @@ export default async function ServiceDetailPage({ params }: PageProps) {
             </p>
 
             <div className="mt-8">
-              <h3 className="text-lg font-semibold text-slate-900 mb-4">What's Included?</h3>
+              <h3 className="text-lg font-semibold text-slate-900 mb-4">What&apos;s Included?</h3>
               <div className="grid sm:grid-cols-2 gap-4">
                 {service.features.map((feature: string, idx: number) => (
                   <div key={idx} className="flex items-start gap-3">
