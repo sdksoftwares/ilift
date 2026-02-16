@@ -79,7 +79,7 @@ export const SPARE_PARTS_MENU = [
     },
     { name: "Brake Parts", href: "/products?category=spares_brake" },
     { name: "Transmission", href: "/products?category=spares_transmission" },
-    { name: "Wheels", href: "/products?category=spares_wheels" },
+    { name: "Tyres & Rims", href: "/products?category=spares_tyres_rims" },
 ]
 
 export const SERVICES_MENU = [

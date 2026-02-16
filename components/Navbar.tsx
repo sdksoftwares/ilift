@@ -115,11 +115,12 @@ export default function Navbar() {
                 {/* 1. LEFT COLUMN: Categories */}
                 <div className="w-[30%] bg-slate-50 py-0 border-r border-slate-100 flex flex-col">
                   {PRODUCTS_MENU.map((item) => (
-                    <div
+                    <Link
                       key={item.name}
+                      href={item.href}
                       onMouseEnter={() => setActiveProductCategory(item)}
                       className={`
-                        px-6 py-4 cursor-pointer flex items-center gap-4 group transition-all duration-200 border-b border-slate-100 last:border-0
+                        block px-6 py-4 cursor-pointer flex items-center gap-4 group transition-all duration-200 border-b border-slate-100 last:border-0
                         ${activeProductCategory.name === item.name
                           ? 'bg-red-600 text-white shadow-md z-10'
                           : 'text-slate-700 hover:bg-white hover:text-red-600'}
@@ -141,7 +142,7 @@ export default function Navbar() {
                       {activeProductCategory.name === item.name && (
                         <span className="text-white text-lg font-bold">›</span>
                       )}
-                    </div>
+                    </Link>
                   ))}
                 </div>
 
@@ -229,11 +230,12 @@ export default function Navbar() {
                 {/* 1. LEFT COLUMN: Categories */}
                 <div className="w-[40%] bg-slate-50 border-r border-slate-100 flex flex-col py-0">
                   {SPARE_PARTS_MENU.map((item) => (
-                    <div
+                    <Link
                       key={item.name}
+                      href={item.href}
                       onMouseEnter={() => setActiveSparePartCategory(item)}
                       className={`
-                        px-6 py-3.5 cursor-pointer flex items-center gap-4 group transition-all duration-200 border-b border-slate-100 last:border-0
+                        block px-6 py-3.5 cursor-pointer flex items-center gap-4 group transition-all duration-200 border-b border-slate-100 last:border-0
                         ${activeSparePartCategory.name === item.name
                           ? 'bg-red-600 text-white shadow-md z-10'
                           : 'text-slate-700 hover:bg-white hover:text-red-600'}
@@ -243,7 +245,7 @@ export default function Navbar() {
                       {activeSparePartCategory.name === item.name && (
                         <span className="text-white text-lg font-bold">›</span>
                       )}
-                    </div>
+                    </Link>
                   ))}
                 </div>
 

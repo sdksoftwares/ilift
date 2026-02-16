@@ -147,10 +147,8 @@ export default function Footer() {
         <div className="max-w-[1440px] mx-auto px-4 lg:px-6 py-8 flex flex-col md:flex-row items-center justify-between gap-6 text-xs text-slate-500">
 
           <div className="flex flex-col md:flex-row items-center gap-6 text-center md:text-left">
-            <p>&copy; {currentYear} iLift Equipment Pvt. Ltd.</p>
+            <p>&copy; {currentYear} i-Lift Hong-Kong.</p>
             <div className="flex items-center gap-6">
-              <Link href="#" className="hover:text-white transition-colors">Privacy Policy</Link>
-              <Link href="#" className="hover:text-white transition-colors">Terms of Use</Link>
               <Link href="#" className="hover:text-white transition-colors">Sitemap</Link>
             </div>
           </div>
@@ -159,10 +157,8 @@ export default function Footer() {
           <div className="flex items-center gap-6 opacity-60 hover:opacity-100 transition-opacity duration-300">
             <div className="flex items-center gap-2">
               <ShieldCheck className="h-4 w-4 text-green-500" />
-              <span className="font-semibold text-slate-400">ISO 9001:2015</span>
+              <span className="font-semibold text-slate-400">Verified Supplier</span>
             </div>
-            <div className="h-4 w-px bg-slate-800" />
-            <span className="font-semibold text-slate-400">Verified Supplier</span>
           </div>
 
         </div>
