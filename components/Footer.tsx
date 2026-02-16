@@ -91,11 +91,10 @@ export default function Footer() {
               Machinery <div className="h-1 w-1 rounded-full bg-red-600" />
             </h4>
             <ul className="space-y-4 text-sm text-slate-500">
-              <li><Link href="/products?category=forklift" className="hover:text-red-500 transition-colors flex items-center gap-2 group"><ArrowRight className="h-3 w-3 opacity-0 -ml-5 group-hover:opacity-100 group-hover:ml-0 transition-all text-red-600" /> Forklifts</Link></li>
-              <li><Link href="/products?category=stacker" className="hover:text-red-500 transition-colors flex items-center gap-2 group"><ArrowRight className="h-3 w-3 opacity-0 -ml-5 group-hover:opacity-100 group-hover:ml-0 transition-all text-red-600" /> Electric Stackers</Link></li>
               <li><Link href="/products?category=pallet_truck" className="hover:text-red-500 transition-colors flex items-center gap-2 group"><ArrowRight className="h-3 w-3 opacity-0 -ml-5 group-hover:opacity-100 group-hover:ml-0 transition-all text-red-600" /> Pallet Trucks</Link></li>
-              <li><Link href="/products?category=crane" className="hover:text-red-500 transition-colors flex items-center gap-2 group"><ArrowRight className="h-3 w-3 opacity-0 -ml-5 group-hover:opacity-100 group-hover:ml-0 transition-all text-red-600" /> Hydraulic Cranes</Link></li>
-              <li><Link href="/products?category=warehouse" className="hover:text-red-500 transition-colors flex items-center gap-2 group"><ArrowRight className="h-3 w-3 opacity-0 -ml-5 group-hover:opacity-100 group-hover:ml-0 transition-all text-red-600" /> Warehouse Equipment</Link></li>
+              <li><Link href="/products?category=stacker" className="hover:text-red-500 transition-colors flex items-center gap-2 group"><ArrowRight className="h-3 w-3 opacity-0 -ml-5 group-hover:opacity-100 group-hover:ml-0 transition-all text-red-600" /> Electric Stackers</Link></li>
+              <li><Link href="/products?category=forklift" className="hover:text-red-500 transition-colors flex items-center gap-2 group"><ArrowRight className="h-3 w-3 opacity-0 -ml-5 group-hover:opacity-100 group-hover:ml-0 transition-all text-red-600" /> Forklifts</Link></li>
+              <li><Link href="/products?category=solid_tyres" className="hover:text-red-500 transition-colors flex items-center gap-2 group"><ArrowRight className="h-3 w-3 opacity-0 -ml-5 group-hover:opacity-100 group-hover:ml-0 transition-all text-red-600" /> Solid Tyres</Link></li>
             </ul>
           </div>
 
@@ -107,7 +106,7 @@ export default function Footer() {
             <ul className="space-y-4 text-sm text-slate-500">
               <li><Link href="/products?category=parts_hydraulic" className="hover:text-red-500 transition-colors flex items-center gap-2 group"><ArrowRight className="h-3 w-3 opacity-0 -ml-5 group-hover:opacity-100 group-hover:ml-0 transition-all text-red-600" /> Hydraulic Parts</Link></li>
               <li><Link href="/products?category=parts_electrical" className="hover:text-red-500 transition-colors flex items-center gap-2 group"><ArrowRight className="h-3 w-3 opacity-0 -ml-5 group-hover:opacity-100 group-hover:ml-0 transition-all text-red-600" /> Electrical Components</Link></li>
-              <li><Link href="/products?category=parts_tyres" className="hover:text-red-500 transition-colors flex items-center gap-2 group"><ArrowRight className="h-3 w-3 opacity-0 -ml-5 group-hover:opacity-100 group-hover:ml-0 transition-all text-red-600" /> Tyres & Wheels</Link></li>
+              <li><Link href="/products?category=parts_tyres" className="hover:text-red-500 transition-colors flex items-center gap-2 group"><ArrowRight className="h-3 w-3 opacity-0 -ml-5 group-hover:opacity-100 group-hover:ml-0 transition-all text-red-600" /> Tyres & Rims</Link></li>
               <li><Link href="/services/amc" className="hover:text-red-500 transition-colors flex items-center gap-2 group"><ArrowRight className="h-3 w-3 opacity-0 -ml-5 group-hover:opacity-100 group-hover:ml-0 transition-all text-red-600" /> Annual Maintenance</Link></li>
               <li><Link href="/services/installation" className="hover:text-red-500 transition-colors flex items-center gap-2 group"><ArrowRight className="h-3 w-3 opacity-0 -ml-5 group-hover:opacity-100 group-hover:ml-0 transition-all text-red-600" /> Installation Service</Link></li>
             </ul>
