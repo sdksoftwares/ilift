@@ -7,7 +7,7 @@ export interface ProductMenuItem {
 
 export const PRODUCTS_MENU: ProductMenuItem[] = [
     {
-        name: "Fork Lifts",
+        name: "Forklifts",
         href: "/products?category=forklift",
         image: "/images/fk2.png",
         subcategories: [
@@ -31,7 +31,7 @@ export const PRODUCTS_MENU: ProductMenuItem[] = [
         image: "/images/rchtrk.png" // Fallback image
     },
     {
-        name: "Heavy Duty Fork Lift",
+        name: "Heavy Duty Forklift",
         href: "/products?category=heavy_duty_forklift",
         image: "/images/fk1.png" // Fallback image
     },
