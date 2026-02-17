@@ -4,6 +4,8 @@ import { Button } from '@/components/ui/button'
 import { Check, FileText } from 'lucide-react'
 import { useCartStore } from '@/lib/store'
 
+import { twMerge } from 'tailwind-merge'
+
 interface Product {
   _id: string
   name: string | { en: string }
@@ -15,7 +17,7 @@ interface Product {
   [key: string]: unknown
 }
 
-export default function AddToCartButton({ product }: { product: Product }) {
+export default function AddToCartButton({ product, className }: { product: Product, className?: string }) {
   // 1. Get both the adder function and the list of current items
   const { addItem, items, toggleCart } = useCartStore()
 
@@ -49,10 +51,13 @@ export default function AddToCartButton({ product }: { product: Product }) {
     <Button
       size="lg"
       onClick={handleAdd}
-      className={`flex-1 h-12 text-base font-bold uppercase tracking-wider rounded-full transition-all shadow-lg hover:shadow-xl ${isAdded
-        ? 'bg-green-600 hover:bg-green-700 text-white'
-        : 'bg-red-600 hover:bg-red-700 text-white'
-        }`}
+      className={twMerge(
+        `flex-1 h-12 text-base font-bold uppercase tracking-wider rounded-full transition-all shadow-lg hover:shadow-xl`,
+        isAdded
+          ? 'bg-green-600 hover:bg-green-700 text-white'
+          : 'bg-red-600 hover:bg-red-700 text-white',
+        className
+      )}
     >
       {isAdded ? (
         <>

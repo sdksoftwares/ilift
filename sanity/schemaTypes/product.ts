@@ -4,11 +4,18 @@ export default defineType({
   name: 'product',
   title: 'Industrial Machinery',
   type: 'document',
+  groups: [
+    { name: 'main', title: 'Main Details' },
+    { name: 'media', title: 'Media' },
+    { name: 'specs', title: 'Technical Specs' },
+    { name: 'logistics', title: 'Logistics & Support' },
+  ],
   fields: [
     defineField({
       name: 'name',
       title: 'Product Name',
       type: 'object',
+      group: 'main',
       fields: [
         { name: 'en', title: 'Name', type: 'string' },
       ],
@@ -17,6 +24,7 @@ export default defineType({
       name: 'slug',
       title: 'Slug',
       type: 'slug',
+      group: 'main',
       options: { source: 'name.en', maxLength: 96 },
       validation: (rule) => rule.required(),
     }),
@@ -24,6 +32,7 @@ export default defineType({
       name: 'category',
       title: 'Category',
       type: 'string',
+      group: 'main',
       options: {
         list: [
           { title: 'Forklift', value: 'forklift' },
@@ -38,11 +47,14 @@ export default defineType({
       validation: (rule) => rule.required(),
     }),
 
+    // --- SUBCATEGORIES ---
+
     // 1. Forklift Subcategories
     defineField({
       name: 'sub_category_forklift',
       title: 'Forklift Type',
       type: 'string',
+      group: 'main',
       options: {
         list: [
           { title: 'Electric Forklift', value: 'forklift_electric' },
@@ -58,6 +70,7 @@ export default defineType({
       name: 'sub_category_stacker',
       title: 'Stacker Type',
       type: 'string',
+      group: 'main',
       options: {
         list: [
           { title: 'Electric Stacker', value: 'stacker_electric' },
@@ -72,6 +85,7 @@ export default defineType({
       name: 'sub_category_pallet_truck',
       title: 'Pallet Truck Type',
       type: 'string',
+      group: 'main',
       options: {
         list: [
           { title: 'Fully Electric', value: 'pallet_truck_electric' },
@@ -87,18 +101,14 @@ export default defineType({
       name: 'sub_category_tyres',
       title: 'Tyre Type',
       type: 'string',
+      group: 'main',
       options: {
         list: [
           { title: 'Solid Resilient', value: 'solid_tyre_resilient' },
           { title: 'Solid Press-on', value: 'solid_tyre_press_on' },
           { title: 'Solid Non Marking', value: 'solid_tyre_non_marking' },
           { title: 'Solid Skid Steer', value: 'solid_tyre_skid_steer' },
-          { title: '18 x 7 - 8 / 4.33"', value: 'solid_tyre_18x7-8_4.33' },
-          { title: '6.00 - 9 / 4.00"', value: 'solid_tyre_600-9_4.00' },
-          { title: '6.50 - 10 / 5.00"', value: 'solid_tyre_650-10_5.00' },
-          { title: '7.00 - 12 / 5.00"', value: 'solid_tyre_700-12_5.00' },
-          { title: '8.15 - 15 / 7.00"', value: 'solid_tyre_815-15_7.00' },
-          { title: '8.25 - 15 / 6.50"', value: 'solid_tyre_825-15_6.50' },
+          { title: 'Solid tyre & rims', value: 'solid_tyre_rims' },
         ]
       },
       hidden: ({ document }) => document?.category !== 'parts_tyres',
@@ -109,6 +119,7 @@ export default defineType({
       name: 'sub_category_spares',
       title: 'Spare Part Type',
       type: 'string',
+      group: 'main',
       options: {
         list: [
           { title: 'Consumables', value: 'spares_consumables' },
@@ -119,23 +130,26 @@ export default defineType({
           { title: 'Brake Parts', value: 'spares_brake' },
           { title: 'Transmission', value: 'spares_transmission' },
           { title: 'Wheels', value: 'spares_wheels' },
-          // Battery Specifics (if needed as flat list)
+          // Battery Specifics
           { title: 'Battery - Wet Cell', value: 'spares_battery_wet' },
           { title: 'Battery - Lithium ion', value: 'spares_battery_lithium' },
         ]
       },
       hidden: ({ document }) => document?.category !== 'spare_parts',
     }),
+
     defineField({
       name: 'isFeatured',
       title: 'Feature on Homepage',
       type: 'boolean',
+      group: 'main',
       initialValue: false,
     }),
     defineField({
       name: 'featuredRank',
       title: 'Homepage Rank (1-8)',
       type: 'number',
+      group: 'main',
       validation: (rule) => rule.min(1).max(8).integer(),
       hidden: ({ document }) => !document?.isFeatured,
     }),
@@ -143,86 +157,63 @@ export default defineType({
       name: 'images',
       title: 'Product Gallery',
       type: 'array',
+      group: 'media',
       of: [{ type: 'image', options: { hotspot: true } }],
     }),
     defineField({
       name: 'description',
       title: 'Product Description',
       type: 'array',
+      group: 'main',
       of: [{ type: 'block' }],
     }),
+
+    // --- TECHNICAL SPECIFICATIONS (Category Specific) ---
+
+    // A. Machinery Specs (General)
     defineField({
       name: 'specifications',
-      title: 'Technical Specifications',
+      title: 'Standard Specifications',
       type: 'object',
+      group: 'specs',
+      description: 'Used for general machinery specs if no specific group is matched.',
+      hidden: ({ document }) => ['parts_tyres', 'spare_parts'].includes(document?.category as string),
       fields: [
-        // Machinery Specs (Forklift, Stacker, Pallet Truck, Warehouse)
         {
           name: 'load_capacity',
-          title: 'Load Capacity (kg)',
-          type: 'number',
-          hidden: ({ document }) => !['forklift', 'stacker', 'reach_truck', 'heavy_duty_forklift', 'pallet_truck', 'warehouse', 'other'].includes(document?.category as string)
+          title: 'Load Capacity',
+          type: 'rangeValue' // Changed from number to rangeValue
         },
         {
           name: 'lift_height',
-          title: 'Lift Height (mm)',
-          type: 'number',
-          hidden: ({ document }) => !['forklift', 'stacker', 'reach_truck', 'heavy_duty_forklift', 'warehouse', 'other'].includes(document?.category as string)
+          title: 'Lift Height',
+          type: 'rangeValue' // Changed from number to rangeValue
         },
         {
           name: 'power_type',
           title: 'Power Type',
           type: 'string',
           options: { list: ['Electric', 'Diesel', 'LPG', 'Manual'] },
-          hidden: ({ document }) => !['forklift', 'stacker', 'reach_truck', 'heavy_duty_forklift', 'pallet_truck', 'other'].includes(document?.category as string)
         },
         {
           name: 'battery_voltage',
-          title: 'Battery Voltage (V)',
-          type: 'string',
-          hidden: ({ document }) => !['forklift', 'stacker', 'reach_truck', 'heavy_duty_forklift', 'pallet_truck', 'other'].includes(document?.category as string || '') || ((document?.specifications as { power_type?: string })?.power_type === 'Manual')
-        },
-
-        // Tyre Specs
-        {
-          name: 'tyre_size',
-          title: 'Tyre Size',
-          type: 'string',
-          hidden: ({ document }) => document?.category !== 'parts_tyres' && document?.category !== 'other'
+          title: 'Battery Voltage',
+          type: 'rangeValue'
         },
         {
-          name: 'tyre_type',
-          title: 'Tyre Type',
-          type: 'string',
-          options: { list: ['Solid', 'Pneumatic', 'Cushion', 'Non-Marking'] },
-          hidden: ({ document }) => document?.category !== 'parts_tyres' && document?.category !== 'other'
+          name: 'fork_length',
+          title: 'Fork Length',
+          type: 'rangeValue'
         },
         {
-          name: 'rim_size',
-          title: 'Rim Size',
-          type: 'string',
-          hidden: ({ document }) => document?.category !== 'parts_tyres' && document?.category !== 'other'
+          name: 'turning_radius',
+          title: 'Turning Radius',
+          type: 'rangeValue'
         },
-        {
-          name: 'pattern',
-          title: 'Pattern / Design',
-          type: 'string',
-          hidden: ({ document }) => document?.category !== 'parts_tyres' && document?.category !== 'other'
-        },
-
-        // Spare Parts / Compatible Brands
-        {
-          name: 'compatible_brands',
-          title: 'Compatible Brands',
-          type: 'string',
-          description: 'e.g., Toyota, Godrej, Voltas',
-          hidden: ({ document }) => document?.category !== 'spare_parts' && document?.category !== 'parts_tyres' && document?.category !== 'other'
-        },
-
-        // Custom Specs
+        // Legacy support / quick field
         {
           name: 'customSpecs',
-          title: 'Custom Specifications',
+          title: 'Additional Specifications',
           type: 'array',
           of: [
             {
@@ -236,10 +227,30 @@ export default defineType({
         }
       ],
     }),
+
+    // B. Tyre Specifications
+    defineField({
+      name: 'tyre_specifications',
+      title: 'Tyre Specifications',
+      type: 'object',
+      group: 'specs',
+      hidden: ({ document }) => document?.category !== 'parts_tyres',
+      fields: [
+        { name: 'size', title: 'Tyre Size', type: 'string' },
+        { name: 'rim_size', title: 'Rim Size', type: 'string' },
+        { name: 'pattern', title: 'Pattern', type: 'string' },
+        { name: 'type', title: 'Type', type: 'string', options: { list: ['Solid', 'Pneumatic', 'Cushion', 'Non-Marking'] } },
+        { name: 'width', title: 'Section Width', type: 'rangeValue' },
+        { name: 'diameter', title: 'Outer Diameter', type: 'rangeValue' },
+      ]
+    }),
+
+    // --- LOGISTICS ---
     defineField({
       name: 'logistics',
       title: 'Logistics & Shipping',
       type: 'object',
+      group: 'logistics',
       fields: [
         {
           name: 'lead_time',
@@ -260,6 +271,7 @@ export default defineType({
       name: 'support',
       title: 'Warranty & Support',
       type: 'object',
+      group: 'logistics',
       fields: [
         {
           name: 'warranty_period',

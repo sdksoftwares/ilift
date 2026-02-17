@@ -1,6 +1,4 @@
-// Imports updated
 import { client, getProduct } from '@/lib/sanity'
-// Removed old imports that might clutter
 import ProductDetailHero from '@/components/ProductDetailHero'
 import ProductFeatures from '@/components/ProductFeatures'
 import RecommendedProducts from '@/components/RecommendedProducts'
@@ -13,6 +11,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { PortableText } from 'next-sanity'
 import { PortableTextBlock } from 'sanity'
 import DownloadSpecButton from '@/components/DownloadSpecButton'
+import { formatRange } from '@/lib/utils'
+
+// Category Specific Components
+import ForkliftSpecs from '@/components/specs/ForkliftSpecs'
+import TyreSpecs from '@/components/specs/TyreSpecs'
+import PalletTruckSpecs from '@/components/specs/PalletTruckSpecs'
+import StackerSpecs from '@/components/specs/StackerSpecs'
 
 function toPlainText(blocks: PortableTextBlock[] = []) {
   if (!blocks || !Array.isArray(blocks)) return ''
@@ -41,7 +46,8 @@ const SIMILAR_PRODUCTS_QUERY = `
         load_capacity,
         power_type,
         lift_height
-    }
+    },
+    tyre_specifications
   }
 `
 
@@ -68,7 +74,7 @@ export async function generateMetadata(
 
   return {
     title: `${productName} | iLift`,
-    description: `Get the best price for ${productName}.Premium ${catName} available for immediate delivery.Request a quote today.`,
+    description: `Get the best price for ${productName}. Premium ${catName} available for immediate delivery. Request a quote today.`,
     openGraph: {
       title: `${productName} - Specifications & Price`,
       description: `Check specifications and pricing for ${productName}.`,
@@ -92,6 +98,59 @@ export default async function ProductPage(props: PageProps) {
   )
 
   const productName = product.name?.en || product.name || "Unknown Product"
+  const specs = product.specifications || {}
+  const tyreSpecs = product.tyre_specifications || {}
+
+  // Determine which Category Specs to render
+  const renderCategorySpecs = () => {
+    const category = product.category
+
+    if (category === 'forklift' || category === 'reach_truck' || category === 'heavy_duty_forklift') {
+      return <ForkliftSpecs product={product} />
+    }
+    if (category === 'parts_tyres') {
+      return <TyreSpecs product={product} />
+    }
+    if (category === 'pallet_truck') {
+      return <PalletTruckSpecs product={product} />
+    }
+    if (category === 'stacker') {
+      return <StackerSpecs product={product} />
+    }
+
+    // Default / Fallback for 'spare_parts', 'warehouse', etc.
+    return (
+      <div className="space-y-6">
+        <h3 className="text-xl font-bold text-slate-900 uppercase border-b border-slate-200 pb-4">Standard Specifications</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-4">
+          {/* Standard Specs Loop */}
+          {Object.entries(specs)
+            .filter(([key]) => key !== 'customSpecs' && typeof specs[key] !== 'object')
+            .map(([key, value]) => (
+              <div key={key} className="flex items-center justify-between py-4 border-b border-slate-100 group hover:bg-slate-50 px-4 -mx-4 rounded-lg transition-colors">
+                <span className="font-medium text-slate-500 capitalize">{key.replace(/_/g, ' ')}</span>
+                <span className="text-slate-900 font-bold">{String(value)}</span>
+              </div>
+            ))}
+
+          {/* Custom Specs */}
+          {specs.customSpecs && Array.isArray(specs.customSpecs) && (
+            specs.customSpecs.map((spec: { key: string; value: string }, idx: number) => (
+              <div key={`custom-${idx}`} className="flex items-center justify-between py-4 border-b border-slate-100 group hover:bg-slate-50 px-4 -mx-4 rounded-lg transition-colors">
+                <span className="font-medium text-slate-500 capitalize">{spec.key}</span>
+                <span className="text-slate-900 font-bold">{spec.value}</span>
+              </div>
+            ))
+          )}
+        </div>
+        {Object.keys(specs).length === 0 && !product.tyre_specifications && (
+          <div className="p-8 text-slate-500 text-center bg-slate-50 rounded-lg">
+            Specification details available on request. Please contact support.
+          </div>
+        )}
+      </div>
+    )
+  }
 
   return (
     <main className="min-h-screen bg-slate-50 font-sans pb-20">
@@ -141,28 +200,48 @@ export default async function ProductPage(props: PageProps) {
                       <p>Detailed product description not available. Please check the specifications for more details.</p>
                     )}
 
-                    {(product.specifications?.load_capacity || product.specifications?.lift_height) && (
+                    {/* Highlights Section */}
+                    {((specs?.load_capacity || specs?.lift_height || specs?.power_type) || (tyreSpecs?.type || tyreSpecs?.size)) && (
                       <div className="mt-8 bg-slate-50 p-6 rounded-xl border border-slate-100">
                         <h4 className="font-bold text-slate-900 uppercase tracking-wider text-sm mb-4">Key Highlights</h4>
                         <ul className="space-y-2 list-none p-0 m-0">
-                          {product.specifications?.load_capacity && (
+                          {formatRange(specs?.load_capacity) !== 'N/A' && (
                             <li className="flex items-center gap-3">
                               <div className="w-2 h-2 bg-red-600 rounded-full" />
-                              <span className="font-bold text-slate-900">{product.specifications.load_capacity}kg</span>
+                              <span className="font-bold text-slate-900">
+                                {(() => {
+                                  const val = formatRange(specs.load_capacity)
+                                  if (val.toLowerCase().includes('kg')) return val
+                                  return `${val} kg`
+                                })()}
+                              </span>
                               <span className="text-slate-500">Rated Load Capacity</span>
                             </li>
                           )}
-                          {product.specifications?.lift_height && (
+                          {tyreSpecs?.size && (
                             <li className="flex items-center gap-3">
                               <div className="w-2 h-2 bg-red-600 rounded-full" />
-                              <span className="font-bold text-slate-900">{product.specifications.lift_height}mm</span>
+                              <span className="font-bold text-slate-900">{tyreSpecs.size}</span>
+                              <span className="text-slate-500">Size</span>
+                            </li>
+                          )}
+                          {formatRange(specs?.lift_height) !== 'N/A' && (
+                            <li className="flex items-center gap-3">
+                              <div className="w-2 h-2 bg-red-600 rounded-full" />
+                              <span className="font-bold text-slate-900">
+                                {(() => {
+                                  const val = formatRange(specs.lift_height)
+                                  if (val.toLowerCase().includes('mm')) return val
+                                  return `${val} mm`
+                                })()}
+                              </span>
                               <span className="text-slate-500">Maximum Lifting Height</span>
                             </li>
                           )}
-                          {product.specifications?.power_type && (
+                          {specs?.power_type && (
                             <li className="flex items-center gap-3">
                               <div className="w-2 h-2 bg-red-600 rounded-full" />
-                              <span className="font-bold text-slate-900">{product.specifications.power_type}</span>
+                              <span className="font-bold text-slate-900">{specs.power_type}</span>
                               <span className="text-slate-500">Power System</span>
                             </li>
                           )}
@@ -185,44 +264,16 @@ export default async function ProductPage(props: PageProps) {
 
               {/* Specs Tab */}
               <TabsContent value="specs" className="mt-0 animate-in fade-in-50 duration-300">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-4">
-                  {product.specifications ? (
-                    <>
-                      {/* Standard Specs */}
-                      {Object.entries(product.specifications)
-                        .filter(([key]) => key !== 'customSpecs')
-                        .map(([key, value]) => (
-                          <div key={key} className="flex items-center justify-between py-4 border-b border-slate-100 group hover:bg-slate-50 px-4 -mx-4 rounded-lg transition-colors">
-                            <span className="font-medium text-slate-500 capitalize">{key.replace(/_/g, ' ')}</span>
-                            <span className="text-slate-900 font-bold">{String(value)}</span>
-                          </div>
-                        ))}
+                {renderCategorySpecs()}
 
-                      {/* Custom Specs */}
-                      {product.specifications.customSpecs && Array.isArray(product.specifications.customSpecs) && (
-                        product.specifications.customSpecs.map((spec: { key: string; value: string }, idx: number) => (
-                          <div key={`custom-${idx}`} className="flex items-center justify-between py-4 border-b border-slate-100 group hover:bg-slate-50 px-4 -mx-4 rounded-lg transition-colors">
-                            <span className="font-medium text-slate-500 capitalize">{spec.key}</span>
-                            <span className="text-slate-900 font-bold">{spec.value}</span>
-                          </div>
-                        ))
-                      )}
-                    </>
-                  ) : (
-                    <div className="p-12 text-slate-500 text-center col-span-2">
-                      Technical specifications sheet available upon request.
-                    </div>
-                  )}
-
-                  <div className="col-span-full mt-8 flex justify-center">
-                    <DownloadSpecButton
-                      productName={productName}
-                      description={toPlainText(product.description)}
-                      specifications={product.specifications || {}}
-                      logistics={product.logistics}
-                      support={product.support}
-                    />
-                  </div>
+                <div className="col-span-full mt-12 flex justify-center border-t border-slate-100 pt-8">
+                  <DownloadSpecButton
+                    productName={productName}
+                    description={toPlainText(product.description)}
+                    specifications={product.specifications || {}}
+                    logistics={product.logistics}
+                    support={product.support}
+                  />
                 </div>
               </TabsContent>
 

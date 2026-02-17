@@ -5,7 +5,7 @@ import { motion } from 'framer-motion'
 import AddToCartButton from '@/components/AddToCartButton'
 import DownloadSpecButton from '@/components/DownloadSpecButton'
 import { Badge } from '@/components/ui/badge'
-import { Scale, ArrowUp, Zap, Circle } from 'lucide-react'
+import { formatRange, RangeValue } from '@/lib/utils'
 
 interface Product {
     _id: string
@@ -13,7 +13,20 @@ interface Product {
     name: string | { en: string }
     images?: string[]
     imageUrl?: string
-    specifications?: Record<string, unknown>
+    specifications?: {
+        load_capacity?: RangeValue | number
+        lift_height?: RangeValue | number
+        power_type?: string
+        tyre_type?: string
+        [key: string]: unknown
+    }
+    tyre_specifications?: {
+        size?: string
+        type?: string
+        width?: RangeValue | number
+        diameter?: RangeValue | number
+        [key: string]: unknown
+    }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     description?: any[]
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -48,77 +61,84 @@ export default function ProductDetailHero({ product }: ProductDetailHeroProps) {
     const productName = typeof product.name === 'object' ? product.name.en : (product.name || "Unknown Product")
     // Safe Access to specs
     const specs = product.specifications || {}
+    const tyreSpecs = product.tyre_specifications || {}
+    const isTyre = product.category === 'parts_tyres'
 
     // Use first image or fallback
     const mainImage = product.images?.[0] || product.imageUrl || null
 
     return (
-        <div className="relative w-full bg-slate-50 overflow-hidden border-b border-slate-200">
+        <div className="relative w-full overflow-hidden bg-white border-b border-slate-200">
 
-            {/* Background Decor */}
-            <div className="absolute top-0 right-0 w-1/2 h-full bg-slate-100 skew-x-12 translate-x-32 z-0" />
-            <div className="absolute top-0 left-0 w-full h-full bg-[url('/images/pattern-grid.png')] opacity-[0.03] z-0" />
+            {/* SPLIT BACKGROUND LAYOUT (Zoomlion Style) */}
+            <div className="absolute inset-y-0 left-0 w-full lg:w-[65%] bg-red-600 z-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-black/40 via-transparent to-transparent">
+                {/* Texture / Grid */}
+                <div className="absolute inset-0 bg-[url('/images/pattern-grid.png')] opacity-10 mix-blend-overlay" />
+                {/* Decorative Big Text */}
+                <div className="absolute top-10 right-10 text-[15rem] lg:text-[20rem] font-bold text-black/10 leading-none select-none pointer-events-none overflow-hidden mix-blend-overlay">
+                    {product.category?.substring(0, 2).toUpperCase() || 'iL'}
+                </div>
+            </div>
 
             <div className="max-w-[1440px] mx-auto px-6 py-12 lg:py-20 relative z-10">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 items-center">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 items-center min-h-[500px]">
 
-                    {/* LEFT: TEXT CONTENT with Background */}
-                    <div className="bg-gradient-to-br from-red-50 via-orange-50 to-amber-50 p-8 lg:p-16 min-h-[500px] flex items-center">
-                        <motion.div
-                            initial={{ opacity: 0, x: -30 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ duration: 0.6 }}
-                            className="space-y-6 w-full"
-                        >
-                            <Badge variant="outline" className="text-white bg-red-600 border-red-600 uppercase tracking-widest text-xs font-bold px-3 py-1">
-                                {product.category?.replace(/_/g, ' ') || 'Industrial Series'}
-                            </Badge>
+                    {/* LEFT: TEXT CONTENT (On Red) */}
+                    <motion.div
+                        initial={{ opacity: 0, x: -30 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.6 }}
+                        className="space-y-8 w-full text-white lg:pr-12"
+                    >
+                        <Badge variant="outline" className="text-white border-white/30 bg-black/20 backdrop-blur-sm uppercase tracking-widest text-xs font-bold px-4 py-1.5 rounded-full">
+                            {product.category?.replace(/_/g, ' ') || 'Industrial Series'}
+                        </Badge>
 
-                            <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-slate-900 uppercase leading-none tracking-tight">
-                                {productName}
-                            </h1>
+                        <h1 className="text-5xl md:text-6xl lg:text-7xl font-black uppercase leading-[0.9] tracking-tighter drop-shadow-lg">
+                            {productName}
+                        </h1>
 
-                            <p className="text-lg text-slate-600 max-w-lg leading-relaxed">
-                                Engineered for maximum efficiency and durability. The {productName} delivers superior performance for your most demanding warehouse operations.
-                            </p>
+                        <p className="text-lg md:text-xl text-red-50 max-w-lg leading-relaxed font-medium">
+                            Engineered for maximum efficiency and durability. The {productName} delivers superior performance for your most demanding warehouse operations.
+                        </p>
 
-                            <div className="flex flex-wrap items-center gap-4 pt-4">
-                                <div className="w-48">
-                                    <AddToCartButton product={product} />
-                                </div>
-                                <DownloadSpecButton
-                                    productName={productName}
-                                    description={toPlainText(product.description)}
-                                    specifications={product.specifications || {}}
-                                    logistics={product.logistics}
-                                    support={product.support}
-                                    variant="ghost"
-                                    label="Technical Datasheet"
+                        <div className="flex flex-wrap items-center gap-4 pt-6">
+                            <div className="w-52">
+                                <AddToCartButton
+                                    product={product}
+                                    className="bg-slate-900 text-white hover:bg-black hover:text-white border-none shadow-xl"
                                 />
                             </div>
-                        </motion.div>
-                    </div>
+                            <DownloadSpecButton
+                                productName={productName}
+                                description={toPlainText(product.description)}
+                                specifications={product.specifications || {}}
+                                logistics={product.logistics}
+                                support={product.support}
+                                variant="outline"
+                                label="Technical Datasheet"
+                                className="border-2 border-white text-white hover:bg-white hover:text-red-700 font-bold shadow-none"
+                            />
+                        </div>
+                    </motion.div>
 
-                    {/* RIGHT: HERO IMAGE */}
+                    {/* RIGHT: HERO IMAGE (Breakout) */}
                     <motion.div
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        animate={{ opacity: 1, scale: 1 }}
+                        initial={{ opacity: 0, scale: 0.9, x: 50 }}
+                        animate={{ opacity: 1, scale: 1, x: 0 }}
                         transition={{ duration: 0.8 }}
-                        className="relative h-[300px] md:h-[500px] w-full flex items-center justify-center bg-slate-50"
+                        className="relative h-[400px] lg:h-[600px] w-full flex items-center justify-end lg:-ml-20 pointer-events-none"
                     >
-                        {/* Enhanced Ground Shadow */}
-                        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-4/5 h-12 bg-slate-900/20 blur-2xl rounded-full" />
-
                         {mainImage ? (
                             <Image
                                 src={mainImage}
                                 alt={productName}
                                 fill
-                                className="object-contain drop-shadow-2xl relative z-10"
+                                className="object-contain drop-shadow-2xl relative z-10 origin-center lg:origin-left scale-125 hover:scale-130 transition-transform duration-700"
                                 priority
                             />
                         ) : (
-                            <div className="w-full h-full bg-slate-200 rounded-xl flex items-center justify-center text-slate-400 font-bold">
+                            <div className="w-full h-full bg-white/5 backdrop-blur-sm rounded-xl flex items-center justify-center text-white/50 font-bold border border-white/10">
                                 No Image Available
                             </div>
                         )}
@@ -127,44 +147,84 @@ export default function ProductDetailHero({ product }: ProductDetailHeroProps) {
                 </div>
             </div>
 
-            {/* STATS BAR (Attached Bottom) */}
-            <div className="w-full bg-gradient-to-r from-slate-50 to-white border-t border-slate-200 relative z-20 shadow-md">
-                <div className="max-w-[1440px] mx-auto px-6 py-8">
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            {/* STATS BAND (Clean White Strip at Bottom) */}
+            <div className="w-full bg-white relative z-20">
+                <div className="max-w-[1440px] mx-auto">
+                    <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-slate-100">
 
-                        {/* Stat 1: Capacity */}
-                        <div className="text-center px-6 py-6 rounded-xl bg-gradient-to-br from-blue-50 to-blue-100/50 border border-blue-100 hover:shadow-lg transition-shadow">
-                            <Scale className="w-7 h-7 text-blue-600 mx-auto mb-3" />
-                            <p className="text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Rated Capacity</p>
-                            <p className="text-3xl md:text-4xl font-black text-slate-900">
-                                {specs.load_capacity ? <>{String(specs.load_capacity)}<span className="text-base font-medium text-slate-600 ml-1">kg</span></> : '-'}
+                        {!isTyre ? (
+                            <>
+                                {/* Stat 1: Capacity */}
+                                <div className="text-center px-4 py-8 md:py-10 group hover:bg-slate-50 transition-colors">
+                                    <p className="text-4xl md:text-5xl font-light text-slate-900 mb-2 group-hover:text-red-600 transition-colors tracking-tight">
+                                        {(() => {
+                                            const val = formatRange(specs.load_capacity)
+                                            if (val === 'N/A') return '-'
+                                            if (val.toLowerCase().includes('kg')) return val
+                                            return <>{val}<span className="text-lg font-medium text-slate-400 ml-1">kg</span></>
+                                        })()}
+                                    </p>
+                                    <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Rated Capacity</p>
+                                </div>
+
+                                {/* Stat 2: Lift Height */}
+                                <div className="text-center px-4 py-8 md:py-10 group hover:bg-slate-50 transition-colors">
+                                    <p className="text-4xl md:text-5xl font-light text-slate-900 mb-2 group-hover:text-red-600 transition-colors tracking-tight">
+                                        {(() => {
+                                            const val = formatRange(specs.lift_height)
+                                            if (val === 'N/A') return '-'
+                                            if (val.toLowerCase().includes('mm')) return val
+                                            return <>{val}<span className="text-lg font-medium text-slate-400 ml-1">mm</span></>
+                                        })()}
+                                    </p>
+                                    <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Max Height</p>
+                                </div>
+
+                                {/* Stat 3: Turn Radius (New for visual balance if avail) or Power */}
+                                <div className="text-center px-4 py-8 md:py-10 group hover:bg-slate-50 transition-colors">
+                                    <p className="text-4xl md:text-5xl font-light text-slate-900 mb-2 group-hover:text-red-600 transition-colors tracking-tight truncate px-2">
+                                        {/* Fallback to Power if no turn radius */}
+                                        {String(specs.power_type || (product.category?.includes('electric') ? 'Electric' : 'Manual'))}
+                                    </p>
+                                    <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Power Source</p>
+                                </div>
+                            </>
+                        ) : (
+                            <>
+                                {/* Tyre Stat 1: Size */}
+                                <div className="text-center px-4 py-8 md:py-10 group hover:bg-slate-50 transition-colors">
+                                    <p className="text-3xl md:text-5xl font-light text-slate-900 mb-2 group-hover:text-red-600 transition-colors tracking-tight">
+                                        {tyreSpecs.size || '-'}
+                                    </p>
+                                    <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Tyre Size</p>
+                                </div>
+
+                                {/* Tyre Stat 2: Diameter */}
+                                <div className="text-center px-4 py-8 md:py-10 group hover:bg-slate-50 transition-colors">
+                                    <p className="text-4xl md:text-5xl font-light text-slate-900 mb-2 group-hover:text-red-600 transition-colors tracking-tight">
+                                        {formatRange(tyreSpecs.diameter) !== 'N/A' ? formatRange(tyreSpecs.diameter) : '-'}
+                                    </p>
+                                    <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Diameter</p>
+                                </div>
+
+                                {/* Tyre Stat 3: Type */}
+                                <div className="text-center px-4 py-8 md:py-10 group hover:bg-slate-50 transition-colors">
+                                    <p className="text-3xl md:text-5xl font-light text-slate-900 mb-2 group-hover:text-red-600 transition-colors tracking-tight truncate">
+                                        {tyreSpecs.type || 'Solid'}
+                                    </p>
+                                    <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Type</p>
+                                </div>
+                            </>
+                        )}
+
+
+                        {/* Stat 4: Common (Tyre or Category) */}
+                        <div className="text-center px-4 py-8 md:py-10 group hover:bg-slate-50 transition-colors bg-slate-50">
+                            <p className="text-3xl md:text-4xl font-light text-slate-900 mb-2 group-hover:text-red-600 transition-colors tracking-tight truncate">
+                                {isTyre ? String(tyreSpecs.pattern || 'Standard') : String(specs.tyre_type || 'Industrial')}
                             </p>
-                        </div>
-
-                        {/* Stat 2: Lift Height */}
-                        <div className="text-center px-6 py-6 rounded-xl bg-gradient-to-br from-green-50 to-green-100/50 border border-green-100 hover:shadow-lg transition-shadow">
-                            <ArrowUp className="w-7 h-7 text-green-600 mx-auto mb-3" />
-                            <p className="text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Max Height</p>
-                            <p className="text-3xl md:text-4xl font-black text-slate-900">
-                                {specs.lift_height ? <>{String(specs.lift_height)}<span className="text-base font-medium text-slate-600 ml-1">mm</span></> : '-'}
-                            </p>
-                        </div>
-
-                        {/* Stat 3: Power */}
-                        <div className="text-center px-6 py-6 rounded-xl bg-gradient-to-br from-amber-50 to-amber-100/50 border border-amber-100 hover:shadow-lg transition-shadow">
-                            <Zap className="w-7 h-7 text-amber-600 mx-auto mb-3" />
-                            <p className="text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Power Source</p>
-                            <p className="text-2xl md:text-3xl font-bold text-slate-900 truncate">
-                                {String(specs.power_type || (product.category?.includes('electric') ? 'Electric' : 'Manual'))}
-                            </p>
-                        </div>
-
-                        {/* Stat 4: Tyre */}
-                        <div className="text-center px-6 py-6 rounded-xl bg-gradient-to-br from-purple-50 to-purple-100/50 border border-purple-100 hover:shadow-lg transition-shadow">
-                            <Circle className="w-7 h-7 text-purple-600 mx-auto mb-3" />
-                            <p className="text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Tyre Type</p>
-                            <p className="text-xl md:text-2xl font-bold text-slate-900 truncate">
-                                {String(specs.tyre_type || 'Industrial')}
+                            <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">
+                                {isTyre ? 'Pattern' : 'Tyre Type'}
                             </p>
                         </div>
 

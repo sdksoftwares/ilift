@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { formatRange } from '@/lib/utils'
 
 interface Product {
     _id: string
@@ -84,7 +85,8 @@ export default function RecommendedProducts({ products }: RecommendedProductsPro
                                         {/* Quick Specs */}
                                         <div className="flex items-center justify-center gap-2 text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-6">
                                             {sim.specifications?.load_capacity && (
-                                                <span>{sim.specifications.load_capacity}kg</span>
+                                                <span>{formatRange(sim.specifications.load_capacity)}
+                                                    {!String(sim.specifications.load_capacity).includes('kg') && typeof sim.specifications.load_capacity !== 'object' && 'kg'}</span>
                                             )}
                                             {sim.specifications?.load_capacity && sim.specifications?.power_type && (
                                                 <span className="w-1 h-1 rounded-full bg-slate-300" />

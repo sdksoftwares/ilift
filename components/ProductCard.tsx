@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { MessageSquare } from 'lucide-react'
 import { useCartStore } from '@/lib/store'
+import { formatRange } from '@/lib/utils'
 
 interface ProductProps {
   product: {
@@ -56,8 +57,6 @@ export default function ProductCard({ product }: ProductProps) {
     router.push('/enquiry')
   }
 
-
-
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
@@ -98,19 +97,24 @@ export default function ProductCard({ product }: ProductProps) {
           {product.specifications?.load_capacity && (
             <div className="flex text-xs text-slate-500">
               <span className="w-1/2">Rated Capacity :</span>
-              <span className="w-1/2 font-semibold text-red-600">{product.specifications.load_capacity}kg</span>
+              <span className="w-1/2 font-semibold text-red-600">
+                {formatRange(product.specifications.load_capacity)}
+                {!String(product.specifications.load_capacity).includes('kg') && typeof product.specifications.load_capacity !== 'object' && 'kg'}
+              </span>
             </div>
           )}
           {product.specifications?.lift_height && (
             <div className="flex text-xs text-slate-500">
               <span className="w-1/2">Max. Lifting Height :</span>
-              <span className="w-1/2 font-semibold text-red-600">{product.specifications.lift_height}</span>
+              <span className="w-1/2 font-semibold text-red-600">
+                {formatRange(product.specifications.lift_height)}
+              </span>
             </div>
           )}
           {product.specifications?.power_type && (
             <div className="flex text-xs text-slate-500">
               <span className="w-1/2">Power Type :</span>
-              <span className="w-1/2 font-semibold text-red-600">{product.specifications.power_type}</span>
+              <span className="w-1/2 font-semibold text-red-600">{String(product.specifications.power_type)}</span>
             </div>
           )}
           {/* Fallback for parts/tyres if primary specs missing */}

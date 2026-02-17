@@ -46,13 +46,14 @@ const productCardProjection = `
 
 // Fetch a single product for the Details Page
 export const PRODUCT_BY_SLUG_QUERY = `
-  *[_type == "product" && slug.current == $slug][0] {
+  * [_type == "product" && slug.current == $slug][0] {
     _id,
     "name": coalesce(name.en, name),
     description,
     specifications,
-    "images": images[].asset->url,
-    "brochureUrl": brochure.asset->url,
+    tyre_specifications,
+    "images": images[].asset -> url,
+    "brochureUrl": brochure.asset -> url,
     category,
     "subCategory": coalesce(sub_category_forklift, sub_category_stacker, sub_category_pallet_truck, sub_category_tyres, sub_category_spares),
     price,
@@ -77,11 +78,11 @@ export async function getProducts(queryStr?: string, categoryStr?: string) {
     const termFilters = terms.map(term => {
       // Each word must appear in Name OR Description OR Category
       return `(
-        name match "*${term}*" || 
-        name.en match "*${term}*" || 
-        description match "*${term}*" || 
-        category match "*${term}*"
-      )`
+  name match "*${term}*" ||
+name.en match "*${term}*" ||
+description match "*${term}*" ||
+category match "*${term}*"
+)`
     })
 
     // 3. Combine word filters with AND (&&)
@@ -96,24 +97,24 @@ export async function getProducts(queryStr?: string, categoryStr?: string) {
     // UPDATED: Check both main category and any sub-category field
     // This allows "forklift_electric" to match the specific sub-category field
     filters.push(`(
-      string::startsWith(category, "${categoryStr}") || 
-      sub_category_forklift == "${categoryStr}" ||
-      sub_category_stacker == "${categoryStr}" ||
-      sub_category_pallet_truck == "${categoryStr}" ||
-      sub_category_tyres == "${categoryStr}" ||
-      sub_category_spares == "${categoryStr}"
-    )`)
+  string:: startsWith(category, "${categoryStr}") ||
+  sub_category_forklift == "${categoryStr}" ||
+  sub_category_stacker == "${categoryStr}" ||
+  sub_category_pallet_truck == "${categoryStr}" ||
+  sub_category_tyres == "${categoryStr}" ||
+sub_category_spares == "${categoryStr}"
+)`)
   }
 
   // Combine filters
   const filterString = filters.join(' && ')
 
   // Construct Query
-  const query = `*[${filterString}] | order(_createdAt desc) {
+  const query = `* [${filterString}] | order(_createdAt desc) {
     ${productCardProjection}
-  }`
+} `
 
-  console.log(`Smart Search Query: ${filterString}`)
+  console.log(`Smart Search Query: ${filterString} `)
 
   // Fetch with NO CACHE (Instant Updates)
   return client.fetch(query, {}, { next: { revalidate: 0 } })
@@ -121,7 +122,7 @@ export async function getProducts(queryStr?: string, categoryStr?: string) {
 
 // Fetch Unique Categories
 export async function getCategories() {
-  const query = `*[_type == "product"] { category }`
+  const query = `* [_type == "product"] { category } `
   const products = await client.fetch(query, {}, { next: { revalidate: 0 } })
 
   // 1. Get categories from actual products
@@ -164,9 +165,9 @@ export async function getCategories() {
 
 // Fetch Featured Products (Homepage)
 export async function getFeaturedProducts() {
-  const query = `*[_type == "product" && isFeatured == true] | order(featuredRank asc) {
+  const query = `* [_type == "product" && isFeatured == true] | order(featuredRank asc) {
     ${productCardProjection}
-  }`
+} `
 
   return client.fetch(query, {}, { next: { revalidate: 0 } })
 }

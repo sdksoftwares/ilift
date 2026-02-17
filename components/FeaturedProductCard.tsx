@@ -6,6 +6,7 @@ import { motion } from 'framer-motion'
 import { Plus, Eye } from 'lucide-react'
 import { useCartStore } from '@/lib/store'
 import { Button } from '@/components/ui/button'
+import { formatRange } from '@/lib/utils'
 
 interface ProductProps {
   product: {
@@ -111,7 +112,8 @@ export default function FeaturedProductCard({ product }: ProductProps) {
                 <>
                   {product.specifications?.load_capacity && (
                     <span className="flex items-center">
-                      <span className="font-semibold text-slate-700 mr-1">Load:</span> {product.specifications.load_capacity}kg
+                      <span className="font-semibold text-slate-700 mr-1">Load:</span> {formatRange(product.specifications.load_capacity)}
+                      {!String(product.specifications.load_capacity).includes('kg') && typeof product.specifications.load_capacity !== 'object' && 'kg'}
                     </span>
                   )}
                   {product.specifications?.power_type && (

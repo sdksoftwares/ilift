@@ -14,8 +14,9 @@ interface DownloadSpecButtonProps {
         warranty_period?: string
         support_coverage?: string
     }
-    variant?: 'primary' | 'ghost'
+    variant?: 'primary' | 'ghost' | 'outline'
     label?: string
+    className?: string
 }
 
 export default function DownloadSpecButton({
@@ -25,7 +26,8 @@ export default function DownloadSpecButton({
     logistics,
     support,
     variant = 'primary',
-    label = 'Download Full Spec Sheet'
+    label = 'Download Full Spec Sheet',
+    className = ''
 }: DownloadSpecButtonProps) {
 
     const handleDownload = () => {
@@ -92,13 +94,15 @@ export default function DownloadSpecButton({
     const baseStyles = "inline-flex items-center justify-center px-6 py-3 font-bold uppercase tracking-wider rounded-lg transition-all"
     const variants = {
         primary: "border-2 border-slate-900 text-slate-900 hover:bg-slate-900 hover:text-white",
-        ghost: "border-2 border-transparent text-slate-500 hover:text-red-600 hover:bg-red-50"
+        ghost: "border-2 border-transparent text-slate-500 hover:text-red-600 hover:bg-red-50",
+        outline: "border-2 border-slate-200 text-slate-700 hover:border-slate-900 hover:text-slate-900"
     }
 
+    // Allow className escape hatch
     return (
         <button
             onClick={handleDownload}
-            className={`${baseStyles} ${variants[variant]}`}
+            className={`${baseStyles} ${variants[variant]} ${className}`}
         >
             {label}
             <FileDown className="ml-2 w-4 h-4" />
