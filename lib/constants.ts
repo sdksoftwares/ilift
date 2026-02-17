@@ -54,12 +54,7 @@ export const PRODUCTS_MENU: ProductMenuItem[] = [
             { name: "Solid Press-on", href: "/products?category=solid_tyre_press_on" },
             { name: "Solid Non Marking", href: "/products?category=solid_tyre_non_marking" },
             { name: "Solid Skid Steer", href: "/products?category=solid_tyre_skid_steer" },
-            { name: '18 x 7 - 8 / 4.33"', href: "/products?category=solid_tyre_18x7-8_4.33" },
-            { name: '6.00 - 9 / 4.00"', href: "/products?category=solid_tyre_600-9_4.00" },
-            { name: '6.50 - 10 / 5.00"', href: "/products?category=solid_tyre_650-10_5.00" },
-            { name: '7.00 - 12 / 5.00"', href: "/products?category=solid_tyre_700-12_5.00" },
-            { name: '8.15 - 15 / 7.00"', href: "/products?category=solid_tyre_815-15_7.00" },
-            { name: '8.25 - 15 / 6.50"', href: "/products?category=solid_tyre_825-15_6.50" },
+            { name: "Solid tyre & rims", href: "/products?category=solid_tyre_rims" },
         ]
     },
 ]
