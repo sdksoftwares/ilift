@@ -73,11 +73,11 @@ export default function ContactForm() {
                         </div>
                         <h3 className="text-xl font-bold text-slate-900 mb-2">Sales Department</h3>
                         <p className="text-slate-500 text-sm mb-6">For quotes, catalog, and bulk orders</p>
-                        <a href="tel:+919876543210" className="text-lg font-bold text-slate-900 hover:text-red-600 transition-colors">
-                            +91 98765 43210
+                        <a href="tel:+85223456789" className="text-lg font-bold text-slate-900 hover:text-red-600 transition-colors">
+                            +852 2345 6789
                         </a>
-                        <a href="mailto:sales@ilift.in" className="text-sm font-medium text-slate-500 hover:text-red-600 mt-1 transition-colors">
-                            sales@ilift.in
+                        <a href="mailto:sales@ilift.co.in" className="text-sm font-medium text-slate-500 hover:text-red-600 mt-1 transition-colors">
+                            sales@ilift.co.in
                         </a>
                     </div>
 
@@ -89,7 +89,7 @@ export default function ContactForm() {
                         <h3 className="text-xl font-bold text-slate-900 mb-2">Headquarters</h3>
                         <p className="text-slate-500 text-sm mb-6">Main Office & Experience Center</p>
                         <p className="text-slate-900 font-medium max-w-[220px] leading-relaxed">
-                            Lagos, Nigeria
+                            Kwun Tong, Kowloon,<br />Hong Kong
                         </p>
                     </div>
 
@@ -103,7 +103,7 @@ export default function ContactForm() {
                         <p className="text-slate-900 font-bold text-lg">
                             9:00 AM - 6:00 PM
                         </p>
-                        <p className="text-xs text-slate-400 mt-1 font-medium bg-slate-100 px-2 py-1 rounded">WAT (West Africa Time)</p>
+                        <p className="text-xs text-slate-400 mt-1 font-medium bg-slate-100 px-2 py-1 rounded">HKT (Hong Kong Time)</p>
                     </div>
 
                 </div>
@@ -228,7 +228,7 @@ export default function ContactForm() {
                                 width="100%"
                                 height="100%"
                                 title="iLift Location"
-                                src="https://maps.google.com/maps?q=Lagos%2C%20Nigeria&t=&z=13&ie=UTF8&iwloc=&output=embed"
+                                src="https://maps.google.com/maps?q=Kwun%20Tong%2C%20Hong%20Kong&t=&z=13&ie=UTF8&iwloc=&output=embed"
                                 className="w-full h-full grayscale-[0.8] contrast-[1.1] opacity-80 group-hover:grayscale-0 group-hover:contrast-100 group-hover:opacity-100 transition-all duration-700 ease-in-out"
                                 style={{ border: 0 }}
                                 allowFullScreen
@@ -240,7 +240,7 @@ export default function ContactForm() {
                             <div className="absolute inset-0 flex items-center justify-center pointer-events-none group-hover:opacity-0 transition-opacity duration-500">
                                 <div className="bg-slate-900/80 backdrop-blur-sm px-4 py-2 rounded-full border border-slate-700 flex items-center gap-2 text-white text-sm font-medium shadow-xl">
                                     <MapPin className="h-4 w-4 text-red-500" />
-                                    Lagos, Nigeria
+                                    Kwun Tong, Hong Kong
                                 </div>
                             </div>
                         </div>

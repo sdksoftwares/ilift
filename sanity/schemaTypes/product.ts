@@ -180,6 +180,15 @@ export default defineType({
       hidden: ({ document }) => ['parts_tyres', 'spare_parts'].includes(document?.category as string),
       fields: [
         {
+          name: 'specification_sheet',
+          title: 'Specification Sheet (PDF/Doc)',
+          type: 'file',
+          options: {
+            accept: '.pdf,.doc,.docx'
+          },
+          description: 'Upload a PDF or DOCX file. If present, the "Download Spec Sheet" button will download this file instead of generating one.'
+        },
+        {
           name: 'load_capacity',
           title: 'Load Capacity',
           type: 'rangeValue' // Changed from number to rangeValue
@@ -194,6 +203,12 @@ export default defineType({
           title: 'Power Type',
           type: 'string',
           options: { list: ['Electric', 'Diesel', 'LPG', 'Manual'] },
+        },
+        {
+          name: 'tyre_type', // New Editable Field
+          title: 'Tyre Type',
+          type: 'string',
+          description: 'e.g. Polyurethane, Nylon, Rubber (Leave empty to use category default)',
         },
         {
           name: 'battery_voltage',

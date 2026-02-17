@@ -273,6 +273,7 @@ export default async function ProductPage(props: PageProps) {
                     specifications={product.specifications || {}}
                     logistics={product.logistics}
                     support={product.support}
+                    fileUrl={product.specSheetUrl}
                   />
                 </div>
               </TabsContent>

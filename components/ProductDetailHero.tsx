@@ -18,6 +18,7 @@ interface Product {
         lift_height?: RangeValue | number
         power_type?: string
         tyre_type?: string
+        fork_length?: RangeValue | number
         [key: string]: unknown
     }
     tyre_specifications?: {
@@ -35,6 +36,8 @@ interface Product {
     support?: any
     category?: string
     price?: number
+    specSheetUrl?: string // New field for attached file
+    brochureUrl?: string
     [key: string]: unknown
 }
 
@@ -109,6 +112,10 @@ export default function ProductDetailHero({ product }: ProductDetailHeroProps) {
                                     className="bg-slate-900 text-white hover:bg-black hover:text-white border-none shadow-xl"
                                 />
                             </div>
+                            {/* DEBUG: Remove later */}
+                            <div className="hidden">
+                                Spec: {product.specSheetUrl || 'None'} | Brochure: {product.brochureUrl || 'None'}
+                            </div>
                             <DownloadSpecButton
                                 productName={productName}
                                 description={toPlainText(product.description)}
@@ -118,6 +125,7 @@ export default function ProductDetailHero({ product }: ProductDetailHeroProps) {
                                 variant="outline"
                                 label="Technical Datasheet"
                                 className="border-2 border-white text-white hover:bg-white hover:text-red-700 font-bold shadow-none"
+                                fileUrl={product.specSheetUrl || product.brochureUrl}
                             />
                         </div>
                     </motion.div>
@@ -167,26 +175,54 @@ export default function ProductDetailHero({ product }: ProductDetailHeroProps) {
                                     <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Rated Capacity</p>
                                 </div>
 
-                                {/* Stat 2: Lift Height */}
+                                {/* Stat 2: Lift Height OR Fork Length (for Pallet Trucks) */}
                                 <div className="text-center px-4 py-8 md:py-10 group hover:bg-slate-50 transition-colors">
                                     <p className="text-4xl md:text-5xl font-light text-slate-900 mb-2 group-hover:text-red-600 transition-colors tracking-tight">
                                         {(() => {
+                                            // Pallet Truck Override: Show Fork Length if Lift Height is missing or N/A
+                                            if (product.category === 'pallet_truck') {
+                                                const val = formatRange(specs.fork_length)
+                                                if (val === 'N/A') return '-'
+                                                // If value already has a unit (like "inch"), don't add "mm"
+                                                if (/[a-zA-Z]/.test(val)) return val
+                                                return <>{val}<span className="text-lg font-medium text-slate-400 ml-1">mm</span></>
+                                            }
+
+                                            // Default: Lift Height
                                             const val = formatRange(specs.lift_height)
                                             if (val === 'N/A') return '-'
                                             if (val.toLowerCase().includes('mm')) return val
                                             return <>{val}<span className="text-lg font-medium text-slate-400 ml-1">mm</span></>
                                         })()}
                                     </p>
-                                    <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Max Height</p>
+                                    <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">
+                                        {product.category === 'pallet_truck' ? 'Fork Length' : 'Max Height'}
+                                    </p>
                                 </div>
 
-                                {/* Stat 3: Turn Radius (New for visual balance if avail) or Power */}
+                                {/* Stat 3: Power Source */}
                                 <div className="text-center px-4 py-8 md:py-10 group hover:bg-slate-50 transition-colors">
                                     <p className="text-4xl md:text-5xl font-light text-slate-900 mb-2 group-hover:text-red-600 transition-colors tracking-tight truncate px-2">
-                                        {/* Fallback to Power if no turn radius */}
                                         {String(specs.power_type || (product.category?.includes('electric') ? 'Electric' : 'Manual'))}
                                     </p>
                                     <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Power Source</p>
+                                </div>
+
+                                {/* Stat 4: Tyre Type */}
+                                <div className="text-center px-4 py-8 md:py-10 group hover:bg-slate-50 transition-colors bg-slate-50">
+                                    <p className="text-3xl md:text-4xl font-light text-slate-900 mb-2 group-hover:text-red-600 transition-colors tracking-tight truncate">
+                                        {(() => {
+                                            if (specs.tyre_type) return String(specs.tyre_type)
+
+                                            // Defaults based on category
+                                            if (product.category === 'pallet_truck' || product.category === 'stacker') return 'Polyurethane'
+
+                                            return 'Industrial'
+                                        })()}
+                                    </p>
+                                    <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">
+                                        Tyre Type
+                                    </p>
                                 </div>
                             </>
                         ) : (
@@ -214,19 +250,18 @@ export default function ProductDetailHero({ product }: ProductDetailHeroProps) {
                                     </p>
                                     <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Type</p>
                                 </div>
+
+                                {/* Tyre Stat 4: Pattern */}
+                                <div className="text-center px-4 py-8 md:py-10 group hover:bg-slate-50 transition-colors bg-slate-50">
+                                    <p className="text-3xl md:text-4xl font-light text-slate-900 mb-2 group-hover:text-red-600 transition-colors tracking-tight truncate">
+                                        {String(tyreSpecs.pattern || 'Standard')}
+                                    </p>
+                                    <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">
+                                        Pattern
+                                    </p>
+                                </div>
                             </>
                         )}
-
-
-                        {/* Stat 4: Common (Tyre or Category) */}
-                        <div className="text-center px-4 py-8 md:py-10 group hover:bg-slate-50 transition-colors bg-slate-50">
-                            <p className="text-3xl md:text-4xl font-light text-slate-900 mb-2 group-hover:text-red-600 transition-colors tracking-tight truncate">
-                                {isTyre ? String(tyreSpecs.pattern || 'Standard') : String(specs.tyre_type || 'Industrial')}
-                            </p>
-                            <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">
-                                {isTyre ? 'Pattern' : 'Tyre Type'}
-                            </p>
-                        </div>
 
                     </div>
                 </div>

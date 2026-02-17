@@ -17,6 +17,7 @@ interface DownloadSpecButtonProps {
     variant?: 'primary' | 'ghost' | 'outline'
     label?: string
     className?: string
+    fileUrl?: string | null
 }
 
 export default function DownloadSpecButton({
@@ -27,11 +28,18 @@ export default function DownloadSpecButton({
     support,
     variant = 'primary',
     label = 'Download Full Spec Sheet',
-    className = ''
+    className = '',
+    fileUrl
 }: DownloadSpecButtonProps) {
 
     const handleDownload = () => {
-        // 1. Construct the content
+        // 1. If File URL exists, open it directly
+        if (fileUrl) {
+            window.open(fileUrl, '_blank')
+            return
+        }
+
+        // 2. Fallback: Generate Text Content
         let content = `PRODUCT SPECIFICATION SHEET: ${productName.toUpperCase()}\n`
         content += `Generated on ${new Date().toLocaleDateString()}\n\n`
         content += `=================================================================\n`
@@ -101,6 +109,7 @@ export default function DownloadSpecButton({
     // Allow className escape hatch
     return (
         <button
+            type="button"
             onClick={handleDownload}
             className={`${baseStyles} ${variants[variant]} ${className}`}
         >

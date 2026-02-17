@@ -42,16 +42,16 @@ export default function Footer() {
 
           {/* Contact Info (Clickable) */}
           <div className="space-y-4 pt-2">
-            <a href="tel:+919876543210" className="flex items-center gap-4 text-slate-400 hover:text-white transition-colors group">
+            <a href="tel:+85223456789" className="flex items-center gap-4 text-slate-400 hover:text-white transition-colors group">
               <div className="h-10 w-10 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center group-hover:bg-red-600 group-hover:border-red-600 transition-all">
                 <Phone className="h-4 w-4" />
               </div>
               <div>
                 <span className="block text-xs uppercase font-bold tracking-wider text-slate-600 group-hover:text-slate-400 transition-colors">Call Us</span>
-                <span className="font-bold text-slate-200"></span>
+                <span className="font-bold text-slate-200">+852 2345 6789</span>
               </div>
             </a>
-            <a href="mailto:sales@ilift.in" className="flex items-center gap-4 text-slate-400 hover:text-white transition-colors group">
+            <a href="mailto:sales@ilift.co.in" className="flex items-center gap-4 text-slate-400 hover:text-white transition-colors group">
               <div className="h-10 w-10 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center group-hover:bg-red-600 group-hover:border-red-600 transition-all">
                 <Mail className="h-4 w-4" />
               </div>
@@ -147,7 +147,7 @@ export default function Footer() {
         <div className="max-w-[1440px] mx-auto px-4 lg:px-6 py-8 flex flex-col md:flex-row items-center justify-between gap-6 text-xs text-slate-500">
 
           <div className="flex flex-col md:flex-row items-center gap-6 text-center md:text-left">
-            <p>&copy; {currentYear} i-Lift Hong-Kong.</p>
+            <p>&copy; {currentYear} i-Lift Hong Kong.</p>
             <div className="flex items-center gap-6">
               <Link href="#" className="hover:text-white transition-colors">Sitemap</Link>
             </div>

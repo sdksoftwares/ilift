@@ -51,6 +51,7 @@ export const PRODUCT_BY_SLUG_QUERY = `
     "name": coalesce(name.en, name),
     description,
     specifications,
+    "specSheetUrl": specifications.specification_sheet.asset->url,
     tyre_specifications,
     "images": images[].asset -> url,
     "brochureUrl": brochure.asset -> url,
