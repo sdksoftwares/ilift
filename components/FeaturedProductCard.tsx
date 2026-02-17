@@ -68,12 +68,12 @@ export default function FeaturedProductCard({ product }: ProductProps) {
           <div className="absolute inset-0 bg-gradient-to-tr from-slate-100 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
           {product.imageUrl ? (
-            <div className="relative w-full h-full z-10">
+            <div className="relative w-full h-full z-10 p-4">
               <Image
                 src={product.imageUrl}
                 alt={productName}
                 fill
-                className="object-cover transition-transform duration-500 group-hover:scale-105 drop-shadow-sm group-hover:drop-shadow-md"
+                className="object-contain transition-transform duration-500 group-hover:scale-105 drop-shadow-sm group-hover:drop-shadow-md"
               />
             </div>
           ) : (
