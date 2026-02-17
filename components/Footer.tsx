@@ -160,7 +160,6 @@ export default function Footer() {
               <span className="font-semibold text-slate-400">Verified Supplier</span>
             </div>
           </div>
-
         </div>
       </div>
     </footer>
