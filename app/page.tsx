@@ -208,7 +208,7 @@ export default async function Home() {
                       </div>
                       <div className="flex flex-col">
                         <span className="text-xs text-slate-400 uppercase font-bold tracking-wider">Sales & Support</span>
-                        <span className="text-lg font-bold text-white group-hover:text-green-400 transition-colors">+91 98765 43210</span>
+                        <span className="text-lg font-bold text-white group-hover:text-green-400 transition-colors"></span>
                       </div>
                     </div>
                     <ArrowRight className="h-5 w-5 text-slate-500 group-hover:text-white transition-colors" />
@@ -221,7 +221,7 @@ export default async function Home() {
                       </div>
                       <div className="flex flex-col">
                         <span className="text-xs text-slate-400 uppercase font-bold tracking-wider">Email Us</span>
-                        <span className="text-lg font-bold text-white group-hover:text-blue-400 transition-colors">support@ilift.in</span>
+                        <span className="text-lg font-bold text-white group-hover:text-blue-400 transition-colors">support@ilift.co.in</span>
                       </div>
                     </div>
                     <ArrowRight className="h-5 w-5 text-slate-500 group-hover:text-white transition-colors" />
