@@ -127,9 +127,10 @@ export async function POST(req: Request) {
 
     // 3. Send via Resend
     const data = await resend.emails.send({
-      from: 'onboarding@resend.dev', // Testing domain
+      from: 'website@ilift.co.in', // Verified domain
       to: recipientEmail,
       subject: subjectLine,
+      replyTo: user.email, // Replies go directly to the customer
       html: htmlContent,
     });
 
