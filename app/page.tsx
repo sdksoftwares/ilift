@@ -214,7 +214,7 @@ export default async function Home() {
                     <ArrowRight className="h-5 w-5 text-slate-500 group-hover:text-white transition-colors" />
                   </a>
 
-                  <a href="mailto:support@ilift.in" className="flex items-center justify-between p-4 rounded-xl bg-white/5 hover:bg-white/10 border border-white/5 transition-all group">
+                  <a href="mailto:support@ilift.co.in" className="flex items-center justify-between p-4 rounded-xl bg-white/5 hover:bg-white/10 border border-white/5 transition-all group">
                     <div className="flex items-center gap-4">
                       <div className="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-400">
                         <Mail className="h-5 w-5" />

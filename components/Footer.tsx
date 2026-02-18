@@ -51,13 +51,13 @@ export default function Footer() {
                 <span className="font-bold text-slate-200">+852 2345 6789</span>
               </div>
             </a>
-            <a href="mailto:sales@ilift.co.in" className="flex items-center gap-4 text-slate-400 hover:text-white transition-colors group">
+            <a href="mailto:info@ilift.co.in" className="flex items-center gap-4 text-slate-400 hover:text-white transition-colors group">
               <div className="h-10 w-10 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center group-hover:bg-red-600 group-hover:border-red-600 transition-all">
                 <Mail className="h-4 w-4" />
               </div>
               <div>
                 <span className="block text-xs uppercase font-bold tracking-wider text-slate-600 group-hover:text-slate-400 transition-colors">Email Us</span>
-                <span className="font-bold text-slate-200">sales@ilift.co.in</span>
+                <span className="font-bold text-slate-200">info@ilift.co.in</span>
               </div>
             </a>
           </div>

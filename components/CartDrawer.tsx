@@ -26,8 +26,8 @@ export default function CartDrawer() {
         {items.length === 0 ? (
           <div className="flex-1 flex flex-col items-center justify-center text-slate-400">
             <p>Your list is empty.</p>
-            <Button 
-              variant="link" 
+            <Button
+              variant="link"
               onClick={toggleCart}
               className="text-[#FFD700] hover:text-yellow-600 font-semibold"
             >
@@ -42,21 +42,21 @@ export default function CartDrawer() {
                 <div key={item._id} className="flex gap-4 items-start border-b border-slate-100 pb-4">
                   {/* Thumbnail */}
                   <div className="h-16 w-16 relative bg-slate-50 rounded-md overflow-hidden flex-shrink-0 border">
-                     <Image 
-                       src={item.imageUrl} 
-                       alt={item.name}
-                       fill
-                       className="object-cover"
-                     />
+                    <Image
+                      src={item.imageUrl}
+                      alt={item.name}
+                      fill
+                      className="object-cover"
+                    />
                   </div>
-                  
+
                   {/* Text Info */}
                   <div className="flex-1 min-w-0">
                     <h4 className="text-sm font-bold text-slate-900 truncate">
                       {item.name}
                     </h4>
                     <p className="text-xs text-slate-500 mb-2">{item.category}</p>
-                    <button 
+                    <button
                       onClick={() => removeItem(item._id)}
                       className="text-xs text-red-500 hover:text-red-700 flex items-center gap-1"
                     >
@@ -74,7 +74,7 @@ export default function CartDrawer() {
           <SheetFooter className="border-t pt-4">
             <Link href="/enquiry" onClick={toggleCart} className="w-full">
               <Button className="w-full bg-slate-900 hover:bg-slate-800 text-white h-12 text-base">
-                Request Bulk Quote <ArrowRight className="ml-2 h-4 w-4" />
+                Request Quote <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </Link>
           </SheetFooter>

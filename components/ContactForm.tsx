@@ -28,12 +28,24 @@ export default function ContactForm() {
         setLoading(true)
 
         try {
-            // Simulate API call
-            await new Promise(resolve => setTimeout(resolve, 1500))
-            setSubmitted(true)
-            setFormData({ name: '', email: '', phone: '', company: '', message: '' })
+            const res = await fetch('/api/email', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    user: formData,
+                    type: 'contact' // Route to info@ilift.co.in
+                })
+            })
+
+            if (res.ok) {
+                setSubmitted(true)
+                setFormData({ name: '', email: '', phone: '', company: '', message: '' })
+            } else {
+                alert('Failed to send message. Please try again.')
+            }
         } catch (error) {
             console.error(error)
+            alert('An error occurred. Please try again.')
         } finally {
             setLoading(false)
         }
@@ -103,7 +115,10 @@ export default function ContactForm() {
                         <p className="text-slate-900 font-bold text-lg">
                             9:00 AM - 6:00 PM
                         </p>
-                        <p className="text-xs text-slate-400 mt-1 font-medium bg-slate-100 px-2 py-1 rounded">HKT (Hong Kong Time)</p>
+                        <a href="mailto:support@ilift.co.in" className="text-sm font-medium text-slate-500 hover:text-green-600 mt-1 transition-colors">
+                            support@ilift.co.in
+                        </a>
+                        <p className="text-xs text-slate-400 mt-2 font-medium bg-slate-100 px-2 py-1 rounded">HKT (Hong Kong Time)</p>
                     </div>
 
                 </div>

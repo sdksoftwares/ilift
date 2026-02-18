@@ -24,22 +24,28 @@ export default function EnquiryClient() {
         message: ''
     })
 
+    const [submittedCount, setSubmittedCount] = useState(0)
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         setLoading(true)
 
         try {
+            const currentItemCount = items.length; // Capture count before clearing
+
             // Send data to our API endpoint
             const res = await fetch('/api/email', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     user: formData,
-                    items: items
+                    items: items,
+                    type: 'quote' // Specify this is a quote request
                 })
             })
 
             if (res.ok) {
+                setSubmittedCount(currentItemCount)
                 setSuccess(true)
                 clearCart() // Clear the cart after success
             } else {
@@ -63,7 +69,7 @@ export default function EnquiryClient() {
                     </div>
                     <h1 className="text-3xl font-bold text-slate-900 mb-2">Quote Requested!</h1>
                     <p className="text-slate-600 mb-8">
-                        Thank you, <strong>{formData.name}</strong>. Our engineering team has received your request for {items.length} items. We will contact you shortly.
+                        Thank you, <strong>{formData.name}</strong>. Our engineering team has received your request for {submittedCount} items. We will contact you shortly.
                     </p>
                     <Link href="/">
                         <Button className="w-full bg-slate-900 hover:bg-slate-800 text-white h-12">
