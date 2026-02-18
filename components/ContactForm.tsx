@@ -150,7 +150,7 @@ export default function ContactForm() {
                                         <label className="text-sm font-bold text-slate-700">Your Name</label>
                                         <Input
                                             required
-                                            placeholder="John Doe"
+                                            placeholder="Your full name here"
                                             value={formData.name}
                                             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                                             className="bg-slate-50 border-slate-200 h-12 rounded-xl focus:ring-2 focus:ring-red-600/20 focus:border-red-600 focus:bg-white transition-all"
@@ -161,7 +161,7 @@ export default function ContactForm() {
                                         <Input
                                             required
                                             type="tel"
-                                            placeholder="+91 98765 00000"
+                                            placeholder="contact phone number"
                                             value={formData.phone}
                                             onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                                             className="bg-slate-50 border-slate-200 h-12 rounded-xl focus:ring-2 focus:ring-red-600/20 focus:border-red-600 focus:bg-white transition-all"
@@ -174,7 +174,7 @@ export default function ContactForm() {
                                     <Input
                                         required
                                         type="email"
-                                        placeholder="john@company.com"
+                                        placeholder="your email address"
                                         value={formData.email}
                                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                                         className="bg-slate-50 border-slate-200 h-12 rounded-xl focus:ring-2 focus:ring-red-600/20 focus:border-red-600 focus:bg-white transition-all"

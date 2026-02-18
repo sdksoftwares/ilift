@@ -34,7 +34,7 @@ export const CoreExpertise = () => {
                                 Specializing in high-performance <span className="text-slate-900 font-semibold">Forklifts, Pallet Trucks, and Stackers</span>, we deliver machinery that thrives in the most punishing industrial environments.
                             </p>
                             <p>
-                                Our specialized <span className="text-slate-900 font-semibold">Solid Tyres</span> utilize advanced rubber compounds for puncture-proof durability and massive load-bearing capacity.
+                                Our specialized <span className="text-slate-900 font-semibold">Solid Tyres</span> utilize advanced rubber compounds for its durability and massive load-bearing capacity.
                             </p>
                         </div>
 
